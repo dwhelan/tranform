@@ -19,6 +19,7 @@ defmodule Transform.Mixfile do
 
   defp deps do
     [
+      {:ecto,            "~> 2.1"},
       {:mix_test_watch,  "~> 0.5", only: :dev},
     ]
   end
