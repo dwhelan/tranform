@@ -1,5 +1,5 @@
 defmodule Transform do
-  def transform(type, value) when is_atom(type) do
-    Transform.Type.transform(type, value)
+  def transform(value, type) when is_atom(type) do
+    Transform.Type.transform(value, type)
   end
 end
