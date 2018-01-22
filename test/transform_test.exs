@@ -13,5 +13,9 @@ defmodule TransformTest do
     test ":binary" do
       assert Transform.transform(123, :binary) === {:ok, "123"}
     end
+
+    test "error is raised when primitive is invalid" do
+      assert_raise UndefinedFunctionError, fn -> Transform.transform(123, :foo) end
+    end
   end
 end
