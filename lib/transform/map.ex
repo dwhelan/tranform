@@ -1,5 +1,5 @@
 defmodule Transform.Map do
-  def cast(source, target \\ %{}) do
+  def transform(source, target \\ %{}) do
     source
     |> Map.keys
     |> remove_meta_keys

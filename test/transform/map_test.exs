@@ -12,24 +12,24 @@ defmodule Transform.MapTest do
 
   describe "supported types" do
     test "struct -> struct" do
-      assert Map.cast(source(), Target) == target()
+      assert Map.transform(source(), Target) == target()
     end
 
     test "struct -> map" do
-      assert Map.cast(source(), %{}) == map()
+      assert Map.transform(source(), %{}) == map()
     end
 
     test "map -> struct" do
-      assert Map.cast(map(), Target) == target()
+      assert Map.transform(map(), Target) == target()
     end
 
     test "map -> map" do
-      assert Map.cast(map(), %{}) == map()
+      assert Map.transform(map(), %{}) == map()
     end
   end
 
   test "should default to creating a target map" do
-    assert Map.cast(source()) == map()
+    assert Map.transform(source()) == map()
   end
 
   defp source, do: %Source{a: "a", b: 42, c: false}
