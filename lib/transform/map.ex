@@ -1,10 +1,11 @@
 defmodule Transform.Map do
   def transform(source, target, target_key \\ &target_key/1) when is_map(target) do
-    {:ok, source
+    target = source
     |> Map.keys
     |> reject_meta_keys
     |> copy_values(source, target, target_key)
-  }
+
+    {:ok, target}
   end
 
   defp reject_meta_keys keys do
