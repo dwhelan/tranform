@@ -24,4 +24,10 @@ defmodule TransformTest do
     target = Transform.transform(source, Target)
     assert target == %Target{a: "a", b: 42, c: false}
   end
+
+  test "map transformations" do
+    source = %Source{a: "a", b: 42, c: false}
+    target = Transform.transform(source, %{})
+    assert target == %{a: "a", b: 42, c: false}
+  end
 end

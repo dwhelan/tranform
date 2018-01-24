@@ -12,4 +12,8 @@ defmodule Transform do
   def transform(source, target = %{__struct__: _}) do
     Transform.Struct.transform source, target
   end
+
+  def transform(source, target = %{}) do
+    Transform.Map.transform source, target
+  end
 end
