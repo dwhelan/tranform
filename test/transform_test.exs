@@ -15,19 +15,19 @@ defmodule TransformTest do
 
   test "struct transformations" do
     source = %Source{a: "a", b: 42, c: false}
-    target = Transform.transform(source, %Target{})
+    {:ok, target} = Transform.transform(source, %Target{})
     assert target == %Target{a: "a", b: 42, c: false}
-  end
+end
 
   test "struct module transformations" do
     source = %Source{a: "a", b: 42, c: false}
-    target = Transform.transform(source, Target)
+    {:ok, target} = Transform.transform(source, Target)
     assert target == %Target{a: "a", b: 42, c: false}
   end
 
   test "map transformations" do
     source = %Source{a: "a", b: 42, c: false}
-    target = Transform.transform(source, %{})
+    {:ok, target} = Transform.transform(source, %{})
     assert target == %{a: "a", b: 42, c: false}
   end
 end

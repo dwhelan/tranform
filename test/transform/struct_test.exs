@@ -11,25 +11,29 @@ defmodule Transform.StructTest do
   end
 
   describe "transform" do
-    @tag :focus
     test "struct -> struct" do
-      assert Struct.transform(%Source{a: "a", b: 42, c: false}, %Target{}) == %Target{a: "a", b: 42, c: false}
+      {:ok, target} = Struct.transform %Source{a: "a", b: 42, c: false}, %Target{}
+      assert target == %Target{a: "a", b: 42, c: false}
     end
 
     test "struct -> struct module" do
-      assert Struct.transform(%Source{a: "a", b: 42, c: false}, Target) == %Target{a: "a", b: 42, c: false}
+      {:ok, target} = Struct.transform %Source{a: "a", b: 42, c: false}, Target
+      assert target == %Target{a: "a", b: 42, c: false}
     end
 
     test "map -> struct" do
-      assert Struct.transform(%{a: "a", b: 42, c: false}, %Target{}) == %Target{a: "a", b: 42, c: false}
+      {:ok, target} = Struct.transform %{a: "a", b: 42, c: false}, %Target{}
+      assert target == %Target{a: "a", b: 42, c: false}
     end
 
     test "map -> struct module" do
-      assert Struct.transform(%{a: "a", b: 42, c: false}, Target) == %Target{a: "a", b: 42, c: false}
+      {:ok, target} = Struct.transform %{a: "a", b: 42, c: false}, Target
+      assert target == %Target{a: "a", b: 42, c: false}
     end
 
     test "map with string keys -> struct" do
-      assert Struct.transform(%{"a" => "a", "b" => 42, "c" => false}, %Target{}) == %Target{a: "a", b: 42, c: false}
+      {:ok, target} = Struct.transform %{"a" => "a", "b" => 42, "c" => false}, %Target{}
+      assert target == %Target{a: "a", b: 42, c: false}
     end
   end
 end

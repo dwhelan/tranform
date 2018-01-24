@@ -8,11 +8,13 @@ defmodule Transform.MapTest do
 
   describe "transform" do
     test "struct -> map" do
-      assert Map.transform(%Source{a: "a", b: 42, c: false}, %{}) == %{a: "a", b: 42, c: false}
+      {:ok, target} = Map.transform %Source{a: "a", b: 42, c: false}, %{}
+      assert target == %{a: "a", b: 42, c: false}
     end
 
     test "map -> map" do
-      assert Map.transform(%{a: "a", b: 42, c: false}, %{}) == %{a: "a", b: 42, c: false}
+      {:ok, target} = Map.transform %{a: "a", b: 42, c: false}, %{}
+      assert target == %{a: "a", b: 42, c: false}
     end
   end
 end
