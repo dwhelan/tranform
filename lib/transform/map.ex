@@ -2,19 +2,17 @@ defmodule Transform.Map do
   def transform(source, target) when is_map(target) do
     source
     |> Map.keys
-    |> remove_meta_keys
+    |> reject_meta_keys
     |> copy_values(source, target)
   end
 
-  @does_not_start_with__ ~r/^(?!__).+/
-
-  defp remove_meta_keys(keys) do
-    Enum.filter(keys, &Regex.match?(@does_not_start_with__, Atom.to_string(&1))) 
+  def reject_meta_keys keys do
+    Enum.reject keys, &meta_key?(&1)
   end
 
-  defp copy_values(keys, source, target) when is_atom(target) do
-    copy_values(keys, source, struct(target))
-  end
+  defp meta_key?(key) when is_atom(key),   do: meta_key? Atom.to_string(key)
+  defp meta_key?(key) when is_binary(key), do: Regex.match? ~r/^__/, key
+  defp meta_key?(_),                       do: true
 
   defp copy_values(keys, source, target) do
     Enum.reduce(keys, target, &copy_value(&1, source, &2))
@@ -22,9 +20,5 @@ defmodule Transform.Map do
 
   defp copy_value(key, source, target) do
     Map.put(target, key, Map.get(source, key))
-  end
-
-  def string(atom) when is_atom(atom) do
-    Atom.to_string(atom)
   end
 end
