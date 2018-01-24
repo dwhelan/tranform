@@ -1,9 +1,10 @@
 defmodule Transform.Map do
-  def transform(source, target, target_key \\ &target_key/1) when is_map(target) do
-    target = source
-    |> Map.keys
-    |> reject_meta_keys
-    |> copy_values(source, target, target_key)
+  def transform(source, target, target_key_fun \\ &use_source_key/1) when is_map(target) do
+    target = 
+      source
+      |> Map.keys
+      |> reject_meta_keys
+      |> copy_values(source, target, target_key_fun)
 
     {:ok, target}
   end
@@ -23,7 +24,5 @@ defmodule Transform.Map do
     Map.put(target, target_key.(key), Map.get(source, key))
   end
 
-  defp target_key(key) do
-    key
-  end
+  defp use_source_key(key), do: key
 end

@@ -17,7 +17,7 @@ defmodule TransformTest do
     source = %Source{a: "a", b: 42, c: false}
     {:ok, target} = Transform.transform(source, %Target{})
     assert target == %Target{a: "a", b: 42, c: false}
-end
+  end
 
   test "struct module transformations" do
     source = %Source{a: "a", b: 42, c: false}
