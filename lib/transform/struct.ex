@@ -6,25 +6,17 @@ defmodule Transform.Struct do
   def transform(source, target = %{__struct__: _}) do
     source
     |> Map.keys
-    |> remove_meta_keys
+    |> reject_meta_keys
     |> copy_values(source, target)
   end
 
-  @does_not_start_with__ ~r/^(?!__).+/
-
-  defp remove_meta_keys keys do
-    Enum.filter keys, &keep_key?(&1)
+  defp reject_meta_keys keys do
+    Enum.reject keys, &meta_key?(&1)
   end
 
-  defp keep_key?(key) when is_atom(key) do
-    keep_key? Atom.to_string(key)
-  end
-  defp keep_key?(key) when is_binary(key) do
-    Regex.match?(@does_not_start_with__, key) 
-  end
-  defp keep_key?(_) do
-    true
-  end
+  defp meta_key?(key) when is_atom(key),   do: meta_key? Atom.to_string(key)
+  defp meta_key?(key) when is_binary(key), do: Regex.match? ~r/^__/, key
+  defp meta_key?(_),                       do: true
 
   defp copy_values(keys, source, target) do
     Enum.reduce(keys, target, fn key, target -> copy_value(key, source, target) end)
