@@ -1,5 +1,5 @@
 defmodule Transform.Map do
-  def transform(source, target \\ %{}) do
+  def transform(source, target) when is_map(target) do
     source
     |> Map.keys
     |> remove_meta_keys
@@ -22,5 +22,9 @@ defmodule Transform.Map do
 
   defp copy_value(key, source, target) do
     Map.put(target, key, Map.get(source, key))
+  end
+
+  def string(atom) when is_atom(atom) do
+    Atom.to_string(atom)
   end
 end
