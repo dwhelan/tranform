@@ -13,9 +13,15 @@ defmodule TransformTest do
     assert Transform.transform("123", :integer) === {:ok, 123}
   end
 
-  test "to struct transformations" do
+  test "struct transformations" do
     source = %Source{a: "a", b: 42, c: false}
     target = Transform.transform(source, %Target{})
+    assert target == %Target{a: "a", b: 42, c: false}
+  end
+
+  test "struct module transformations" do
+    source = %Source{a: "a", b: 42, c: false}
+    target = Transform.transform(source, Target)
     assert target == %Target{a: "a", b: 42, c: false}
   end
 end

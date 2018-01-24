@@ -1,5 +1,6 @@
 defmodule Transform.TypeTest do
   use ExUnit.Case
+  alias Transform.Type
 
   describe "primitives" do
     test ":integer" do
@@ -16,6 +17,12 @@ defmodule Transform.TypeTest do
 
     test "error is raised when primitive is invalid" do
       assert_raise UndefinedFunctionError, fn -> Transform.Type.transform(123, :foo) end
+    end
+  end
+
+  describe "primitive?" do
+    test ":binary" do
+      assert Type.primitive?(:binary)
     end
   end
 end

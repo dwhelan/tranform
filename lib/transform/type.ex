@@ -2,11 +2,15 @@ defmodule Transform.Type do
   # TODO: make Ecto.Type pluggable
   require Ecto.Type
 
-  def transform(value, atom) when atom in [:string, :binary] do
-    {:ok, to_string(value)}
+  def transform(source, target) when target in [:string, :binary] do
+    {:ok, to_string(source)}
   end
 
-  def transform(value, type) do
-    Ecto.Type.cast(type, value)
-  end  
+  def transform(source, target) do
+    Ecto.Type.cast(target, source)
+  end
+  
+  def primitive?(target) do
+    Ecto.Type.primitive? target
+  end
 end
