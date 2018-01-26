@@ -28,7 +28,11 @@ defmodule Transform.TypeTest do
     end
 
     test ":date" do
-      assert Transform.Type.transform("2001-01-01", :date) === {:ok, ~D[2001-01-01]}
+      assert Transform.Type.transform("1970-01-01", :date) === {:ok, ~D[1970-01-01]}
+    end
+
+    test ":naive_datetime" do
+      assert Transform.Type.transform("1970-01-01 00:00:00", :naive_datetime) === {:ok, ~N[1970-01-01 00:00:00]}
     end
 
     test ":utc_datetime" do

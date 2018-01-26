@@ -3,6 +3,20 @@ defmodule Transform.Type do
   require Ecto.Type
   require Timex
 
+  @moduledoc """
+  The following Ecto data types are supported:
+  * :integer
+  * :binary (also :string)
+  * :float
+  * :decimal
+  * :boolean
+  * :date
+  * :naive_datetime
+
+  The following Ecto types not supported:
+  * utc_datetime_usec
+
+  """
   def transform(source, target) when target in [:string, :binary] do
     {:ok, to_string(source)}
   end
