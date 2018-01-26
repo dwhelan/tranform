@@ -1,16 +1,20 @@
 defmodule Transform.Transformer do
   require Timex
 
-  def transform(map, transforms) do
-    Enum.reduce transforms, map, &transform2(&2, &1)
+  def transform(value, transforms) when is_list(transforms) do
+    Enum.reduce transforms, value, &transform2(&2, &1)
   end
 
-  defp transform2(map, {key, transforms}) do
-    Enum.reduce(transforms, map, fn {transform, options}, input ->
+  defp transform2(map, {key, transforms}) when is_map(map) do
+    Enum.reduce(transforms, map, fn transform, input ->
       original = Map.get(input, key)
-      {:ok, value} = Timex.Parse.DateTime.Parser.parse(original, options)
+      {:ok, value} = transform3(original, transform)
       Map.put(input, key, value)
     end)
+  end
+
+  def transform3(value, {:date, options}) do
+    Timex.Parse.DateTime.Parser.parse(value, options)
   end
 end
 
