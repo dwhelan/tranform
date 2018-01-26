@@ -13,14 +13,16 @@ defmodule Transform.Mixfile do
 
   def application do
     [
+      applications:       [:timex],
       extra_applications: [:logger]
     ]
   end
 
   defp deps do
     [
-      {:ecto,            "~> 2.1"},
-      {:mix_test_watch,  "~> 0.5", only: :dev},
+      {:ecto,           "~> 2.1"},
+      {:mix_test_watch, "~> 0.5", only: :dev},
+      {:timex,           "~> 3.0"},
     ]
   end
 end
