@@ -31,6 +31,10 @@ defmodule Transform.TypeTest do
       assert Transform.Type.transform("2001-01-01", :date) === {:ok, ~D[2001-01-01]}
     end
 
+    test ":utc_datetime" do
+      assert Transform.Type.transform("1970-01-01 00:00:00", :utc_datetime) === DateTime.from_unix(0)
+    end
+
     test "error is raised when primitive is invalid" do
       assert_raise UndefinedFunctionError, fn -> Transform.Type.transform(123, :foo) end
     end
