@@ -7,12 +7,12 @@ defmodule Transform.Type do
     {:ok, to_string(source)}
   end
 
-  def transform(string, {:date, options}) when is_binary(string) do
-    Timex.Parse.DateTime.Parser.parse(string, options)
-  end
-
   def transform(source, target) do
     Ecto.Type.cast(target, source)
+  end
+
+  def transform(string, :date, options) when is_binary(string) do
+    Timex.Parse.DateTime.Parser.parse(string, options)
   end
 
   def primitive?(target) do
