@@ -1,8 +1,7 @@
 defmodule Transform.Transformer do
-  require Timex
-
+  
   def transform(map, mod) when is_map(map) and is_atom(mod) do
-    transform(map, mod.__transforms__)
+    transform map, mod.__transforms__
   end
 
   def transform(map, transforms) when is_map(map) and is_list(transforms) do
@@ -16,7 +15,7 @@ defmodule Transform.Transformer do
     end)
   end
 
-  def transform(string, {:date, options}) when is_binary(string) do
-    Timex.Parse.DateTime.Parser.parse(string, options)
+  def transform(value, transformation) do
+    Transform.Type.transform(value, transformation)
   end
 end

@@ -15,6 +15,10 @@ defmodule Transform.TypeTest do
       assert Transform.Type.transform(123, :binary) === {:ok, "123"}
     end
 
+    test ":date" do
+      assert Transform.Type.transform("2001-01-01", :date) === {:ok, ~D[2001-01-01]}
+    end
+
     test "error is raised when primitive is invalid" do
       assert_raise UndefinedFunctionError, fn -> Transform.Type.transform(123, :foo) end
     end
