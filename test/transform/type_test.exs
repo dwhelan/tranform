@@ -15,6 +15,18 @@ defmodule Transform.TypeTest do
       assert Transform.Type.transform(123, :binary) === {:ok, "123"}
     end
 
+    test ":float" do
+      assert Transform.Type.transform("123", :float) === {:ok, 123.0}
+    end
+
+    test ":decimal" do
+      assert Transform.Type.transform("123", :decimal) === {:ok, Decimal.new(123)}
+    end
+
+    test ":boolean" do
+      assert Transform.Type.transform("true", :boolean) === {:ok, true}
+    end
+
     test ":date" do
       assert Transform.Type.transform("2001-01-01", :date) === {:ok, ~D[2001-01-01]}
     end
