@@ -12,10 +12,12 @@ defmodule Transform.Type do
   * :boolean
   * :date
   * :naive_datetime
+  * :time
 
   The following Ecto types not supported:
-  * utc_datetime_usec
-
+  * :utc_datetime_usec
+  * :naive_datetime_usec
+  * :time_usec
   """
   def transform(source, target) when target in [:string, :binary] do
     {:ok, to_string(source)}
