@@ -3,21 +3,21 @@ defmodule Transform.TransformTest do
   import Transform.Transformer
 
   defmodule Source do
-    defstruct [:dob]
+    defstruct [:dob1]
   end
 
   defmodule Example do
     use Transform.Transform
 
     transform do
-      field :dob, date: "{YYYY}-{0M}-{0D}"
+      field :dob1, date: "{YYYY}-{0M}-{0D}"
     end
   end
 
   describe "transform" do
-    test "date parsing" do
-      result = transform %Source{dob: "2001-01-01"}, Example
-      assert result.dob == ~N[2001-01-01 00:00:00]
+    test "date with options" do
+      result = transform %Source{dob1: "2001-01-01"}, Example
+      assert result.dob1 == ~N[2001-01-01 00:00:00]
     end
   end
 end
