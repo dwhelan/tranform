@@ -1,25 +1,41 @@
-defmodule Transform.LocaleTest do
+defmodule Transform.Transform.LocaleTest do
   use ExUnit.Case
-  import Transform.Transformer
 
-  defmodule Source do
-    defstruct [:dob1]
-  end
-
-  defmodule Example do
+  defmodule Default do
     use Transform.Transform
 
     transform do
     end
   end
 
-  describe "transform" do
-    test "input locale should default to 'en'" do
-      assert %{in: "en"} = Example.__transforms__(:locale)
-    end
+  test "should default input and output locales to 'en'" do
+    locale = Default.__transforms__(:locale)
+    assert locale == [in: "en", out: "en"] 
+  end
 
-    test "output locale should default to 'en'" do
-      assert %{out: "en"} = Example.__transforms__(:locale)
+  defmodule In do
+    use Transform.Transform
+
+    transform do
+      locale in: "fr"
     end
+  end
+
+  test "should be able to set input locale" do
+    locale = In.__transforms__(:locale)
+    assert locale[:in] == "fr"
+  end
+
+  defmodule Out do
+    use Transform.Transform
+
+    transform do
+      locale out: "fr"
+    end
+  end
+
+  test "should be able to set output locale" do
+    locale = Out.__transforms__(:locale)
+    assert locale[:out] == "fr"
   end
 end
