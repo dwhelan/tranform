@@ -23,6 +23,7 @@ defmodule Transform.Transform do
   def __transforms__(transforms) do
     quote do
       def __transforms__(), do: unquote(transforms)
+      def __transforms__(:locale), do: %{in: "en"}
     end
   end
 

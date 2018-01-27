@@ -1,8 +1,8 @@
-defmodule Transform.TransformerTest do
+defmodule Transform.Transformer.DateTest do
   use ExUnit.Case
   import Transform.Transformer
 
-  describe "transform" do
+  describe "date handling" do
     test "string => :date" do
       {:ok, result} = transform "2001-01-01", :date
       assert result == ~D[2001-01-01]
