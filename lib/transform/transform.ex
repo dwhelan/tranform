@@ -1,4 +1,6 @@
 defmodule Transform.Transform do
+  alias Timex.Translator
+
   defmacro __using__(_opts) do
     quote do
       import unquote __MODULE__
@@ -23,7 +25,7 @@ defmodule Transform.Transform do
   def __transforms__(transforms) do
     quote do
       def __transforms__(), do: unquote(transforms)
-      def __transforms__(:locale), do: %{in: "en"}
+      def __transforms__(:locale), do: %{in: Translator.current_locale, out: Translator.current_locale}
     end
   end
 

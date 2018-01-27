@@ -17,5 +17,9 @@ defmodule Transform.LocaleTest do
     test "input locale should default to 'en'" do
       assert %{in: "en"} = Example.__transforms__(:locale)
     end
+
+    test "output locale should default to 'en'" do
+      assert %{out: "en"} = Example.__transforms__(:locale)
+    end
   end
 end

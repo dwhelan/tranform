@@ -8,3 +8,6 @@
 * remove custom struct and map modules?
 * explicitly handle all primitive types in transformer.ex
 * provide good error handling when transformation atom is invalid
+* documentation
+    * process/app config for locale
+    * available locales see Timex/priv/translations
