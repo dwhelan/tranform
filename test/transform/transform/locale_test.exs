@@ -9,7 +9,7 @@ defmodule Transform.Transform.LocaleTest do
   end
 
   test "should default input and output locales to 'en'" do
-    locale = Default.__transforms__(:locale)
+    locale = Default.__transform__(:locale)
     assert locale == [in: "en", out: "en"] 
   end
 
@@ -22,7 +22,7 @@ defmodule Transform.Transform.LocaleTest do
   end
 
   test "should be able to set input locale" do
-    locale = In.__transforms__(:locale)
+    locale = In.__transform__(:locale)
     assert locale[:in] == "fr"
   end
 
@@ -35,7 +35,7 @@ defmodule Transform.Transform.LocaleTest do
   end
 
   test "should be able to set output locale" do
-    locale = Out.__transforms__(:locale)
+    locale = Out.__transform__(:locale)
     assert locale[:out] == "fr"
   end
 end

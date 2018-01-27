@@ -19,7 +19,7 @@ defmodule Transform.Transform do
 
   defmacro transform do
     quote do
-      Module.eval_quoted __ENV__, Transform.Transform.__transforms__(@transforms, @locale)
+      Module.eval_quoted __ENV__, Transform.Transform.__transform__(@transforms, @locale)
     end
   end
 
@@ -35,10 +35,10 @@ defmodule Transform.Transform do
     end
   end
 
-  def __transforms__(transforms, locale) do
+  def __transform__(transforms, locale) do
     quote do
-      def __transforms__(), do: unquote(transforms)
-      def __transforms__(:locale), do: unquote(locale)
+      def __transform__(), do: unquote(transforms)
+      def __transform__(:locale), do: unquote(locale)
     end
   end
 
