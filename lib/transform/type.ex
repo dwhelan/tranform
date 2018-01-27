@@ -27,7 +27,15 @@ defmodule Transform.Type do
     Ecto.Type.cast(target, source)
   end
 
-  def transform(string, :date, options) when is_binary(string) do
+  def transform(string, :date, options) when is_binary(string) and is_map(options) do
+    parse_option  = hd(Map.keys(options))
+    {:ok, value} = transform(string, :date, parse_option)
+    format_option = hd(Map.values(options))
+
+    Timex.Format.DateTime.Formatter.format(value, format_option)
+  end
+
+  def transform(string, :date, options) when is_binary(string) and is_binary(options) do
     Timex.Parse.DateTime.Parser.parse(string, options)
   end
 
