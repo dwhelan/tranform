@@ -30,8 +30,13 @@ defmodule Transform.Transformer do
 
   def transform(map, key, transforms) when is_map(map) and is_list(transforms) do
     Enum.reduce(transforms, map, fn transform, input ->
-      {:ok, value} = transform(Map.get(input, key), transform)
-      Map.put(input, key, value)
+      value = Map.get(input, key)
+      if value == nil do
+        map
+      else
+        {:ok, value} = transform(value, transform)
+        Map.put(input, key, value)
+      end
     end)
   end
 
