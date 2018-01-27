@@ -37,7 +37,7 @@ defmodule Transform.Transform do
       {name, case transform do
                {:>, _, list} -> list
                list          -> list
-              end
+             end
       }
     end)
   end

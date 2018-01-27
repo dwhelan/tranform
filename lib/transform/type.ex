@@ -19,6 +19,7 @@ defmodule Transform.Type do
   * :naive_datetime_usec
   * :time_usec
   """
+  
   def transform(source, target) when target in [:string, :binary] do
     {:ok, to_string(source)}
   end
