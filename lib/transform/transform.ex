@@ -27,8 +27,20 @@ defmodule Transform.Transform do
   end
 
   defmacro field(name, transforms \\ []) do
-    quote do
-      Module.put_attribute __MODULE__, :transforms, unquote({name, transforms})
+    transforms = Enum.map(transforms, fn {name, transform} ->
+      {name,
+        case transform do
+          {:>, _, args} -> args
+          t -> t
+        end
+      }
+    end)
+
+    quote bind_quoted: [
+      name: name,
+      transforms: Macro.escape(transforms, unquote: true)
+    ] do
+      Module.put_attribute __MODULE__, :transforms, {name, transforms}
     end
   end
 end

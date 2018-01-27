@@ -27,9 +27,10 @@ defmodule Transform.Type do
     Ecto.Type.cast(target, source)
   end
 
-  def transform(string, :date, options) when is_binary(string) and is_map(options) do
-    {:ok, value} = transform(string, :date, hd(Map.keys(options)))
-    transform(value, :string, hd(Map.values(options)))
+  def transform(string, :date, options) when is_binary(string) and is_list(options) do
+    [parse_options | [format_options | _ ]] = options
+    {:ok, value} = transform(string, :date, parse_options)
+    transform(value, :string, format_options)
   end
 
   def transform(value=%NaiveDateTime{}, :string, options) when is_binary(options) do
