@@ -27,20 +27,18 @@ defmodule Transform.Transform do
   end
 
   defmacro field(name, transforms \\ []) do
-    transforms = Enum.map(transforms, fn {name, transform} ->
-      {name,
-        case transform do
-          {:>, _, args} -> args
-          t -> t
-        end
-      }
-    end)
-
-    quote bind_quoted: [
-      name: name,
-      transforms: Macro.escape(transforms, unquote: true)
-    ] do
+    quote bind_quoted: [name: name, transforms: remove_greater_than(transforms)] do
       Module.put_attribute __MODULE__, :transforms, {name, transforms}
     end
+  end
+
+  defp remove_greater_than(transforms) do
+    Enum.map(transforms, fn {name, transform} ->
+      {name, case transform do
+               {:>, _, list} -> list
+               list          -> list
+              end
+      }
+    end)
   end
 end
