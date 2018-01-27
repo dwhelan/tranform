@@ -51,4 +51,17 @@ defmodule Transform.Transform.LocaleTest do
     locale = Both.__transform__(:locale)
     assert locale == [in: "fr", out: "fr"] 
   end
+
+  defmodule FromField do
+    use Transform.Transform
+
+    transform do
+      locale in: :loc_in, out: :loc_out
+    end
+  end
+
+  test "should be able to set to a field reference (atom)" do
+    locale = FromField.__transform__(:locale)
+    assert locale == [in: :loc_in, out: :loc_out] 
+  end
 end

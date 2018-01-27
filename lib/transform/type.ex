@@ -34,15 +34,15 @@ defmodule Transform.Type do
     transform(value, :string, format_options)
   end
 
-  def transform(value=%NaiveDateTime{}, :string, options) when is_binary(options) do
+  def transform(value = %NaiveDateTime{}, :string, options) when is_binary(options) do
     Timex.Format.DateTime.Formatter.format(value, options)
   end
 
-  def transform(value=%Date{}, :string, options) when is_binary(options) do
+  def transform(value = %Date{}, :string, options) when is_binary(options) do
     Timex.Format.DateTime.Formatter.format(value, options)
   end
 
-  def transform(string, :date, options) when is_binary(string) and is_binary(options) do
+  def transform(string, date, options) when is_binary(string) and date in [:date, :naive_datetime] and is_binary(options) do
     Timex.Parse.DateTime.Parser.parse(string, options)
   end
 

@@ -11,3 +11,5 @@
 * documentation
     * process/app config for locale
     * available locales see Timex/priv/translations
+    * document all supported type transformations
+    * document built-in transformations
