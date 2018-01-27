@@ -43,6 +43,10 @@ defmodule TypeTest do
       assert Type.transform("00:00:00", :time) === {:ok, ~T[00:00:00]}
     end
 
+    test "transforming nil should always return nil" do
+      assert Type.transform(nil, :time) === {:ok, nil}
+    end
+
     test "error is raised when primitive is invalid" do
       assert_raise UndefinedFunctionError, fn -> Type.transform(123, :foo) end
     end

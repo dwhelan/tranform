@@ -10,9 +10,9 @@ defmodule Transform.DateTest do
     use Transform.Transform
 
     transform do
-      field :dob1, date: "{YYYY}-{0M}-{0D}"
-      field :dob2, date: ["{YYYY}-{0M}-{0D}", "{Mfull} {D}, {YYYY}"]
-      field :dob3, date: "{YYYY}-{0M}-{0D}" > "{Mshort} {D}, {YYYY}"
+      field :dob1, date:  "{YYYY}-{0M}-{0D}"
+      field :dob2, date: ["{YYYY}-{0M}-{0D}",  "{Mfull} {D}, {YYYY}"]
+      field :dob3, date:  "{YYYY}-{0M}-{0D}" > "{Mshort} {D}, {YYYY}"
     end
   end
 
