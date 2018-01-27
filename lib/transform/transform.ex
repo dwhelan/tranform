@@ -37,8 +37,8 @@ defmodule Transform.Transform do
 
   def __transform__(transforms, locale) do
     quote do
-      def __transform__(), do: unquote(transforms)
-      def __transform__(:locale), do: unquote(locale)
+      def __transform__(:transforms), do: unquote(transforms)
+      def __transform__(:locale),     do: unquote(locale)
     end
   end
 

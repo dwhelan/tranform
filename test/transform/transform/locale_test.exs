@@ -38,4 +38,17 @@ defmodule Transform.Transform.LocaleTest do
     locale = Out.__transform__(:locale)
     assert locale[:out] == "fr"
   end
+
+  defmodule Both do
+    use Transform.Transform
+
+    transform do
+      locale in: "fr", out: "fr"
+    end
+  end
+
+  test "should be able to set both locales" do
+    locale = Both.__transform__(:locale)
+    assert locale == [in: "fr", out: "fr"] 
+  end
 end

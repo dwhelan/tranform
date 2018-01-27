@@ -9,7 +9,7 @@ defmodule Transform.Transformer do
   end
 
   def transform(value, mod) when is_atom(mod) do
-    transform value, mod.__transform__
+    transform value, mod.__transform__(:transforms)
   end
 
   def transform(value, transforms) when is_list(transforms) do
