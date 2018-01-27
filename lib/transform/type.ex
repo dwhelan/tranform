@@ -28,11 +28,16 @@ defmodule Transform.Type do
   end
 
   def transform(string, :date, options) when is_binary(string) and is_map(options) do
-    parse_option  = hd(Map.keys(options))
-    {:ok, value} = transform(string, :date, parse_option)
-    format_option = hd(Map.values(options))
+    {:ok, value} = transform(string, :date, hd(Map.keys(options)))
+    transform(value, :string, hd(Map.values(options)))
+  end
 
-    Timex.Format.DateTime.Formatter.format(value, format_option)
+  def transform(value=%NaiveDateTime{}, :string, options) when is_binary(options) do
+    Timex.Format.DateTime.Formatter.format(value, options)
+  end
+
+  def transform(value=%Date{}, :string, options) when is_binary(options) do
+    Timex.Format.DateTime.Formatter.format(value, options)
   end
 
   def transform(string, :date, options) when is_binary(string) and is_binary(options) do

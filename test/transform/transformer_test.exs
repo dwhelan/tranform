@@ -13,19 +13,19 @@ defmodule Transform.TransformerTest do
       assert result == ~N[2001-01-01 00:00:00]
     end
 
-    test ":data => string" do
+    test "string => :date with parse and format options" do
+      {:ok, result} = transform "2001-01-01", date: %{"{YYYY}-{0M}-{0D}" => "{Mfull} {D}, {YYYY}"}
+      assert result == "January 1, 2001"
+    end
+
+    test ":date => string" do
       {:ok, result} = transform ~D[2001-01-01], :string
       assert result ==  "2001-01-01"
     end
 
-    test ":date with parse options" do
+    test ":date => string with options" do
       {:ok, result} = transform "2001-01-01", date: "{YYYY}-{0M}-{0D}"
       assert result == ~N[2001-01-01 00:00:00]
-    end
-
-    test ":date with parse and format options" do
-      {:ok, result} = transform "2001-01-01", date: %{"{YYYY}-{0M}-{0D}" => "{Mfull} {D}, {YYYY}"}
-      assert result == "January 1, 2001"
     end
   end
 end
