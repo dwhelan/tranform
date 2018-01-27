@@ -1,4 +1,4 @@
-defmodule Transform.TransformTest do
+defmodule Transform.DateTest do
   use ExUnit.Case
   import Transform.Transformer
 
