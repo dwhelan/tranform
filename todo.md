@@ -7,3 +7,4 @@
 * write guides for the transformations
 * remove need for primitive? call
 * remove custom struct and map modules?
+* explicitly handle all primitive types in transformer.ex

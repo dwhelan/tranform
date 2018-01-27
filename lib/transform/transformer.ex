@@ -1,5 +1,9 @@
 defmodule Transform.Transformer do
   
+  def transform(nil, _) do
+    {:ok, nil}
+  end
+
   def transform(value, transform) when transform in [:string, :date] do
     Transform.Type.transform(value, transform)
   end
@@ -30,13 +34,8 @@ defmodule Transform.Transformer do
 
   def transform(map, key, transforms) when is_map(map) and is_list(transforms) do
     Enum.reduce(transforms, map, fn transform, input ->
-      value = Map.get(input, key)
-      if value == nil do
-        map
-      else
-        {:ok, value} = transform(value, transform)
-        Map.put(input, key, value)
-      end
+      {:ok, value} = transform(Map.get(input, key), transform)
+      Map.put(input, key, value)
     end)
   end
 
