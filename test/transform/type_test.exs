@@ -42,6 +42,22 @@ defmodule TypeTest do
     test "float   -> :float  " do
       assert Type.transform(123, :float) === {:ok, 123.0}
     end
+
+    test "decimal -> :integer" do
+      assert Type.transform(Decimal.new(123), :integer) === {:ok, 123}
+    end
+
+    test "decimal -> :float  " do
+      assert Type.transform(Decimal.new(123), :float) === {:ok, 123.0}
+    end
+
+    test "decimal -> :string " do
+      assert Type.transform(Decimal.new(123), :string) === {:ok, "123"}
+    end
+
+    test "decimal -> :binary " do
+      assert Type.transform(Decimal.new(123), :binary) === {:ok, "123"}
+    end
   end
 
   describe "string " do
@@ -55,9 +71,6 @@ defmodule TypeTest do
   end
 
   describe ":float" do
-    test ":decimal" do
-      assert Type.transform("123", :decimal) === {:ok, Decimal.new(123)}
-    end
 
     test ":boolean" do
       assert Type.transform("true", :boolean) === {:ok, true}

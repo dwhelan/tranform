@@ -28,6 +28,14 @@ defmodule Transform.Type do
     {:ok, Kernel.trunc(source)}
   end
 
+  def transform(source=%Decimal{}, :integer) do
+    {:ok, Decimal.to_integer(source)}
+  end
+
+  def transform(source=%Decimal{}, :float) do
+    {:ok, Decimal.to_float(source)}
+  end
+
   def transform(source, target) do
     Ecto.Type.cast(target, source)
   end
