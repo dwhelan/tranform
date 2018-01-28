@@ -24,8 +24,12 @@ defmodule Transform.Transform do
   end
 
   defmacro locale(locale) do
-    quote do
-      Module.put_attribute __MODULE__, :locale, unquote(locale)
+    quote bind_quoted: [locale: locale] do
+      locale = cond do
+        is_binary(locale) -> [in: locale, out: locale]
+        true              -> locale
+      end
+      Module.put_attribute __MODULE__, :locale, locale
     end
   end
 

@@ -12,7 +12,7 @@ defmodule Transform.Transform.LocaleTest do
     assert locale == [in: "en", out: "en"] 
   end
 
-  
+
   defmodule In do
     use Transform.Transform
 
@@ -22,6 +22,18 @@ defmodule Transform.Transform.LocaleTest do
   test "should be able to set input locale" do
     locale = In.__transform__(:locale)
     assert locale[:in] == "fr"
+  end
+
+
+  defmodule Both do
+    use Transform.Transform
+
+    transform do locale "fr" end
+  end
+
+  test "should be able to set both locales with a single value" do
+    locale = Both.__transform__(:locale)
+    assert locale == [in: "fr", out: "fr"] 
   end
 
 
@@ -37,15 +49,15 @@ defmodule Transform.Transform.LocaleTest do
   end
 
 
-  defmodule Both do
+  defmodule Separate do
     use Transform.Transform
 
-    transform do locale in: "fr", out: "fr" end
+    transform do locale in: "fr", out: "de" end
   end
 
   test "should be able to set both locales" do
-    locale = Both.__transform__(:locale)
-    assert locale == [in: "fr", out: "fr"] 
+    locale = Separate.__transform__(:locale)
+    assert locale == [in: "fr", out: "de"] 
   end
 
 
