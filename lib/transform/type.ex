@@ -20,8 +20,29 @@ defmodule Transform.Type do
   * :time_usec
   """
   
-  def transform(source, target) when target in [:string, :binary] do
-    {:ok, to_string(source)}
+  def transform(nil, _) do
+    {:ok, nil}
+  end
+  
+  def transform(any, target) when target in [:string, :binary] do
+    {:ok, to_string(any)}
+  end
+  
+  def transform(integer, target) when is_integer(integer) and target in [:integer, :utc_datetime] do
+    {:ok, integer}
+  end
+
+  def transform(utc_datetime, :time) when is_integer(utc_datetime) do
+    {:ok, datetime} = DateTime.from_unix(utc_datetime)
+    Time.from_erl({datetime.hour, datetime.minute, datetime.second})
+  end
+
+  def transform(utc_datetime, :naive_datetime) when is_integer(utc_datetime) do
+    {:ok, datetime} = DateTime.from_unix(utc_datetime)
+    NaiveDateTime.from_erl({
+      {datetime.year, datetime.month,  datetime.day},
+      {datetime.hour, datetime.minute, datetime.second}
+    })
   end
 
   def transform(source, :integer) when is_float(source) do

@@ -30,6 +30,18 @@ defmodule TypeTest do
     test ":binary " do
       assert Type.transform(123, :binary) === {:ok, "123"}
     end
+
+    test ":naive_datetime" do
+      assert Type.transform(0, :naive_datetime) === {:ok, ~N[1970-01-01 00:00:00]}
+    end
+
+    test ":utc_datetime" do
+      assert Type.transform(0, :utc_datetime) === {:ok, 0}
+    end
+
+    test ":time" do
+      assert Type.transform(0, :time) === {:ok, ~T[00:00:00]}
+    end
   end
 
   describe "Float   to" do
