@@ -1,7 +1,11 @@
 # To do
-* test multiple transformers on the same line
-* handle errors
 * handle locale
+* support transforms that don't take args
+    * field :x, :downcase, :upcase
+    * field :y, date: "YYYY", string: "YY", lowercase :_
+* have default date parsing return naive_datetimes
+* support timezones (already handled I think - add tests)
+* handle errors
 * more thorough testing on data types (within transforms)
 * write guides for the transformations
 * remove need for primitive? call

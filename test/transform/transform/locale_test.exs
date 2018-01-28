@@ -4,8 +4,7 @@ defmodule Transform.Transform.LocaleTest do
   defmodule Default do
     use Transform.Transform
 
-    transform do
-    end
+    transform do end
   end
 
   test "should default input and output locales to 'en'" do
@@ -13,12 +12,11 @@ defmodule Transform.Transform.LocaleTest do
     assert locale == [in: "en", out: "en"] 
   end
 
+  
   defmodule In do
     use Transform.Transform
 
-    transform do
-      locale in: "fr"
-    end
+    transform do locale in: "fr" end
   end
 
   test "should be able to set input locale" do
@@ -26,12 +24,11 @@ defmodule Transform.Transform.LocaleTest do
     assert locale[:in] == "fr"
   end
 
+
   defmodule Out do
     use Transform.Transform
 
-    transform do
-      locale out: "fr"
-    end
+    transform do locale out: "fr" end
   end
 
   test "should be able to set output locale" do
@@ -39,12 +36,11 @@ defmodule Transform.Transform.LocaleTest do
     assert locale[:out] == "fr"
   end
 
+
   defmodule Both do
     use Transform.Transform
 
-    transform do
-      locale in: "fr", out: "fr"
-    end
+    transform do locale in: "fr", out: "fr" end
   end
 
   test "should be able to set both locales" do
@@ -52,12 +48,11 @@ defmodule Transform.Transform.LocaleTest do
     assert locale == [in: "fr", out: "fr"] 
   end
 
+
   defmodule FromField do
     use Transform.Transform
 
-    transform do
-      locale in: :loc_in, out: :loc_out
-    end
+    transform do locale in: :loc_in, out: :loc_out end
   end
 
   test "should be able to set to a field reference (atom)" do
