@@ -1,19 +1,24 @@
 # To do
-* handle locale
+## General
 * support transforms that don't take args
     * field :x, :downcase, :upcase
     * field :y, date: "YYYY", string: "YY", lowercase :_
-* have default date parsing return naive_datetimes
-* support timezones (already handled I think - add tests)
-* handle errors
-* more thorough testing on data types (within transforms)
-* write guides for the transformations
+* handle errors - Timex returns strings Ecto does not
 * remove need for primitive? call
-* remove custom struct and map modules?
-* explicitly handle all primitive types in transformer.ex
-* provide good error handling when transformation atom is invalid
 * documentation
     * process/app config for locale
     * available locales see Timex/priv/translations
-    * document all supported type transformations
     * document built-in transformations
+    * write guides for the transformations?
+
+## Numbers
+* support format/parse options
+* handle decimal errors - will error when there is a loss of precision
+
+## Dates & Times
+* handle locales
+* have default date parsing return naive_datetimes
+* support timezones (already handled I think - add tests)
+
+## Maps
+* remove custom struct and map modules?

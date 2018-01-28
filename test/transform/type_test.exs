@@ -2,79 +2,170 @@ defmodule TypeTest do
   use ExUnit.Case
   alias Transform.Type
 
-  describe "numbers" do
-    test "string  -> :integer" do
-      assert Type.transform("123", :integer) === {:ok, 123}
+  describe "from integer to" do
+    test ":boolean (zero)" do
+      assert Type.transform(0, :boolean) === {:ok, false}
     end
 
-    test "integer -> :string " do
-      assert Type.transform(123, :string) === {:ok, "123"}
+    test ":boolean (non-zero)" do
+      assert Type.transform(42, :boolean) === {:ok, true}
     end
 
-    test "integer -> :binary " do
-      assert Type.transform(123, :binary) === {:ok, "123"}
-    end
-
-    test "integer -> :integer" do
+    test ":integer" do
       assert Type.transform(123, :integer) === {:ok, 123}
     end
 
-    test "float   -> :integer" do
+    test ":float  " do
+      assert Type.transform(123, :float) === {:ok, 123.0}
+    end
+
+    test ":decimal" do
+      assert Type.transform(123, :decimal) === {:ok, Decimal.new(123)}
+    end
+
+    test ":string " do
+      assert Type.transform(123, :string) === {:ok, "123"}
+    end
+
+    test ":binary " do
+      assert Type.transform(123, :binary) === {:ok, "123"}
+    end
+  end
+
+  describe "from float   to" do
+    test ":boolean (zero)" do
+      assert Type.transform(0.0, :boolean) === {:ok, false}
+    end
+
+    test ":boolean (non-zero)" do
+      assert Type.transform(42.0, :boolean) === {:ok, true}
+    end
+
+    test ":integer" do
       assert Type.transform(123.9, :integer) === {:ok, 123}
     end
 
-    test "integer -> :float  " do
-      assert Type.transform(123, :float) === {:ok, 123.0}
+    test ":float  " do
+      assert Type.transform(123.0, :float) === {:ok, 123.0}
     end
 
-    test "string  -> :float  " do
-      assert Type.transform("123", :float) === {:ok, 123.0}
+    test ":decimal" do
+      assert Type.transform(123.0, :decimal) === {:ok, Decimal.new(123.0)}
     end
 
-    test "float   -> :string " do
+    test ":string " do
       assert Type.transform(123.0, :string) === {:ok, "123.0"}
     end
 
-    test "float   -> :binary " do
+    test ":binary " do
       assert Type.transform(123.0, :string) === {:ok, "123.0"}
     end
+  end
 
-    test "float   -> :float  " do
-      assert Type.transform(123, :float) === {:ok, 123.0}
+  describe "from decimal to" do
+    test ":boolean (zero)" do
+      assert Type.transform(Decimal.new(0), :boolean) === {:ok, false}
     end
 
-    test "decimal -> :integer" do
+    test ":boolean (non-zero)" do
+      assert Type.transform(Decimal.new(42), :boolean) === {:ok, true}
+    end
+
+    test ":integer" do
       assert Type.transform(Decimal.new(123), :integer) === {:ok, 123}
     end
 
-    test "decimal -> :float  " do
+    test ":float  " do
       assert Type.transform(Decimal.new(123), :float) === {:ok, 123.0}
     end
 
-    test "decimal -> :string " do
+    test ":decimal" do
+      assert Type.transform(Decimal.new(123), :decimal) === {:ok, Decimal.new(123)}
+    end
+
+    test ":string " do
       assert Type.transform(Decimal.new(123), :string) === {:ok, "123"}
     end
 
-    test "decimal -> :binary " do
+    test ":binary " do
       assert Type.transform(Decimal.new(123), :binary) === {:ok, "123"}
     end
   end
 
-  describe "string " do
-    test "string  -> :string " do
+  describe "from string  to" do
+    test ":boolean ('false')" do
+      assert Type.transform("false", :boolean) === {:ok, false}
+    end
+
+    test ":boolean ('anything else')" do
+      assert Type.transform("anything else", :boolean) === {:ok, true}
+    end
+
+    test ":integer" do
+      assert Type.transform("123", :integer) === {:ok, 123}
+    end
+
+    test ":float  " do
+      assert Type.transform("123.0", :float) === {:ok, 123.0}
+    end
+
+    test ":decimal" do
+      assert Type.transform("123.0", :decimal) === {:ok, Decimal.new("123.0")}
+    end
+
+    test ":string " do
       assert Type.transform("abc", :string) === {:ok, "abc"}
     end
 
-    test "string  -> :binary " do
+    test ":binary " do
       assert Type.transform("abc", :binary) === {:ok, "abc"}
     end
   end
 
-  describe ":float" do
-
+  describe "from false to" do
     test ":boolean" do
-      assert Type.transform("true", :boolean) === {:ok, true}
+      assert Type.transform(false, :boolean) === {:ok, false}
     end
+
+    test ":integer" do
+      assert Type.transform(false, :integer) === {:ok, 0}
+    end
+
+    test ":decimal" do
+      assert Type.transform(false, :decimal) === {:ok, Decimal.new(0)}
+    end
+
+    test ":string" do
+      assert Type.transform(false, :string) === {:ok, "false"}
+    end
+
+    test ":binary" do
+      assert Type.transform(false, :binary) === {:ok, "false"}
+    end
+  end
+
+  describe "from true to" do
+    test ":boolean" do
+      assert Type.transform(true, :boolean) === {:ok, true}
+    end
+    test ":integer" do
+      assert Type.transform(true, :integer) === {:ok, 1}
+    end
+
+    test ":decimal" do
+      assert Type.transform(true, :decimal) === {:ok, Decimal.new(1)}
+    end
+
+    test ":string" do
+      assert Type.transform(true, :string) === {:ok, "true"}
+    end
+
+    test ":binary" do
+      assert Type.transform(true, :binary) === {:ok, "true"}
+    end
+  end
+
+  describe "xx" do
 
     test ":date" do
       assert Type.transform("1970-01-01", :date) === {:ok, ~D[1970-01-01]}

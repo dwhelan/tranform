@@ -25,7 +25,7 @@ defmodule Transform.Type do
   end
 
   def transform(source, :integer) when is_float(source) do
-    {:ok, Kernel.trunc(source)}
+    {:ok, trunc(source)}
   end
 
   def transform(source=%Decimal{}, :integer) do
@@ -34,6 +34,30 @@ defmodule Transform.Type do
 
   def transform(source=%Decimal{}, :float) do
     {:ok, Decimal.to_float(source)}
+  end
+
+  def transform(source=%Decimal{}, :boolean) do
+    {:ok, !Decimal.equal?(source, Decimal.new(0))}
+  end
+
+  def transform(source, :boolean) when is_binary(source) do
+    {:ok, source !== "false"}
+  end
+
+  def transform(source, :boolean) when is_integer(source) or is_float(source) do
+    {:ok, source != 0}
+  end
+
+  def transform(source, :integer) when is_boolean(source) do
+    {:ok, (if source, do: 1, else: 0)}
+  end
+
+  def transform(source, :float) when is_boolean(source) do
+    {:ok, (if source, do: 1.0, else: 0.0)}
+  end
+
+  def transform(source, :decimal) when is_boolean(source) do
+    {:ok, (if source, do: Decimal.new(1), else: Decimal.new(0))}
   end
 
   def transform(source, target) do
