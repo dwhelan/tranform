@@ -3,13 +3,14 @@
 * support transforms that don't take args
     * field :x, :downcase, :upcase
     * field :y, date: "YYYY", string: "YY", lowercase :_
-* handle errors - Timex returns strings Ecto does not
+* handle errors - always return tuples
 * remove need for primitive? call
 * documentation
     * process/app config for locale
     * available locales see Timex/priv/translations
     * document built-in transformations
     * write guides for the transformations?
+* consider lossy conversions as errors?
 
 ## Numbers
 * support format/parse options
