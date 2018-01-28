@@ -2,23 +2,59 @@ defmodule TypeTest do
   use ExUnit.Case
   alias Transform.Type
 
-  describe "primitives" do
-    test ":integer" do
+  describe "numbers" do
+    test "string  -> :integer" do
       assert Type.transform("123", :integer) === {:ok, 123}
     end
 
-    test ":string" do
+    test "integer -> :string " do
       assert Type.transform(123, :string) === {:ok, "123"}
     end
 
-    test ":binary" do
+    test "integer -> :binary " do
       assert Type.transform(123, :binary) === {:ok, "123"}
     end
 
-    test ":float" do
+    test "integer -> :integer" do
+      assert Type.transform(123, :integer) === {:ok, 123}
+    end
+
+    test "float   -> :integer" do
+      assert Type.transform(123.9, :integer) === {:ok, 123}
+    end
+
+    test "integer -> :float  " do
+      assert Type.transform(123, :float) === {:ok, 123.0}
+    end
+
+    test "string  -> :float  " do
       assert Type.transform("123", :float) === {:ok, 123.0}
     end
 
+    test "float   -> :string " do
+      assert Type.transform(123.0, :string) === {:ok, "123.0"}
+    end
+
+    test "float   -> :binary " do
+      assert Type.transform(123.0, :string) === {:ok, "123.0"}
+    end
+
+    test "float   -> :float  " do
+      assert Type.transform(123, :float) === {:ok, 123.0}
+    end
+  end
+
+  describe "string " do
+    test "string  -> :string " do
+      assert Type.transform("abc", :string) === {:ok, "abc"}
+    end
+
+    test "string  -> :binary " do
+      assert Type.transform("abc", :binary) === {:ok, "abc"}
+    end
+  end
+
+  describe ":float" do
     test ":decimal" do
       assert Type.transform("123", :decimal) === {:ok, Decimal.new(123)}
     end
@@ -31,7 +67,7 @@ defmodule TypeTest do
       assert Type.transform("1970-01-01", :date) === {:ok, ~D[1970-01-01]}
     end
 
-    test ":date with format option" do
+    test ":date with format" do
       assert Type.transform("1970-01-01", :date, "{YYYY}-{0M}-{0D}") === {:ok, ~N[1970-01-01 00:00:00]}
     end
 

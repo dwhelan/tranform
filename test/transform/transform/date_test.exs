@@ -41,12 +41,14 @@ defmodule Transform.DateTest do
     use Transform.Transform
 
     transform do
-      field :dob1, date:  "{YYYY}-{0M}-{0D}"
+      locale "fr"
+      field :dob1, date: "{Mfull} {D}, {YYYY}"
     end
   end
 
+  @tag :skip
   test "parse date with locale" do
-    result = transform %Source{dob1: "2001-01-01"}, Example
+    result = transform %Source{dob1: "janvier 1, 2001"}, WithExplicitLocale
     assert result.dob1 == ~N[2001-01-01 00:00:00]
   end
 end

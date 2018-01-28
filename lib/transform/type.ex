@@ -24,6 +24,10 @@ defmodule Transform.Type do
     {:ok, to_string(source)}
   end
 
+  def transform(source, :integer) when is_float(source) do
+    {:ok, Kernel.trunc(source)}
+  end
+
   def transform(source, target) do
     Ecto.Type.cast(target, source)
   end
@@ -37,7 +41,7 @@ defmodule Transform.Type do
   def transform(value = %NaiveDateTime{}, :string, options) when is_binary(options) do
     Timex.Format.DateTime.Formatter.format(value, options)
   end
-
+ 
   def transform(value = %Date{}, :string, options) when is_binary(options) do
     Timex.Format.DateTime.Formatter.format(value, options)
   end
