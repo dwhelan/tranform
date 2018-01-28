@@ -19,6 +19,7 @@
 * handle locales
 * have default date parsing return naive_datetimes
 * support timezones (already handled I think - add tests)
+    * provide timezone when converting to DateTime
 
 ## Maps
 * remove custom struct and map modules?

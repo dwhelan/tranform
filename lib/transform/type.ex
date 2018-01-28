@@ -60,6 +60,19 @@ defmodule Transform.Type do
     {:ok, (if source, do: Decimal.new(1), else: Decimal.new(0))}
   end
 
+  def transform(value = %Date{}, :naive_datetime) do
+    NaiveDateTime.new(value, ~T[00:00:00])
+  end
+
+  def transform(value = %Date{}, :utc_datetime) do
+    {:ok, naive_datetime} = transform(value, :naive_datetime)
+    DateTime.from_naive naive_datetime, "Etc/UTC"
+  end
+
+  def transform(_value = %Date{}, :time) do
+    {:ok, ~T[00:00:00]}
+  end
+
   def transform(source, target) do
     Ecto.Type.cast(target, source)
   end
@@ -77,7 +90,7 @@ defmodule Transform.Type do
   def transform(value = %Date{}, :string, options) when is_binary(options) do
     Timex.Format.DateTime.Formatter.format(value, options)
   end
-
+ 
   def transform(string, date, options) when is_binary(string) and date in [:date, :naive_datetime] and is_binary(options) do
     Timex.Parse.DateTime.Parser.parse(string, options)
   end
