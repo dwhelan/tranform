@@ -2,7 +2,7 @@ defmodule TypeTest do
   use ExUnit.Case
   alias Transform.Type
 
-  describe "from integer to" do
+  describe "Integer to" do
     test ":boolean (zero)" do
       assert Type.transform(0, :boolean) === {:ok, false}
     end
@@ -32,7 +32,7 @@ defmodule TypeTest do
     end
   end
 
-  describe "from float   to" do
+  describe "Float   to" do
     test ":boolean (zero)" do
       assert Type.transform(0.0, :boolean) === {:ok, false}
     end
@@ -62,7 +62,7 @@ defmodule TypeTest do
     end
   end
 
-  describe "from decimal to" do
+  describe "Decimal to" do
     test ":boolean (zero)" do
       assert Type.transform(Decimal.new(0), :boolean) === {:ok, false}
     end
@@ -92,7 +92,7 @@ defmodule TypeTest do
     end
   end
 
-  describe "from string  to" do
+  describe "String  to" do
     test ":boolean ('false')" do
       assert Type.transform("false", :boolean) === {:ok, false}
     end
@@ -122,7 +122,7 @@ defmodule TypeTest do
     end
   end
 
-  describe "from false to" do
+  describe "Boolean false to" do
     test ":boolean" do
       assert Type.transform(false, :boolean) === {:ok, false}
     end
@@ -144,7 +144,7 @@ defmodule TypeTest do
     end
   end
 
-  describe "from true to" do
+  describe "Boolean true to" do
     test ":boolean" do
       assert Type.transform(true, :boolean) === {:ok, true}
     end
@@ -165,7 +165,7 @@ defmodule TypeTest do
     end
   end
 
-  describe "from date to" do
+  describe "from Date to" do
     test ":date" do
       assert Type.transform(~D[1970-01-01], :date) === {:ok, ~D[1970-01-01]}
     end
@@ -188,6 +188,33 @@ defmodule TypeTest do
 
     test ":binary" do
       assert Type.transform(~D[1970-01-01], :binary) === {:ok, "1970-01-01"}
+    end
+  end
+
+
+  describe "from NaiveDateTime to" do
+    test ":date" do
+      assert Type.transform(~N[1970-01-01 00:00:00], :date) === {:ok, ~D[1970-01-01]}
+    end
+
+    test ":naive_datetime" do
+      assert Type.transform(~N[1970-01-01 00:00:00], :naive_datetime) === {:ok, ~N[1970-01-01 00:00:00]}
+    end
+
+    test ":utc_datetime" do
+      assert Type.transform(~N[1970-01-01 00:00:00], :utc_datetime) === DateTime.from_unix(0)
+    end
+
+    test ":time" do
+      assert Type.transform(~N[1970-01-01 00:00:00], :time) === {:ok, ~T[00:00:00]}
+    end
+
+    test ":string" do
+      assert Type.transform(~N[1970-01-01 00:00:00], :string) === {:ok, "1970-01-01 00:00:00"}
+    end
+
+    test ":binary" do
+      assert Type.transform(~N[1970-01-01 00:00:00], :string) === {:ok, "1970-01-01 00:00:00"}
     end
   end
 
