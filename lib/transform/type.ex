@@ -25,10 +25,6 @@ defmodule Transform.Type do
     {:ok, nil}
   end
   
-  def transform(any, target) when target in [:string, :binary] do
-    {:ok, to_string(any)}
-  end
-  
   def transform(integer, :integer) when is_integer(integer) do
     {:ok, integer}
   end
@@ -37,21 +33,21 @@ defmodule Transform.Type do
     DateTime.from_unix(integer)
   end
 
-  def transform(datetime, :time) when is_integer(datetime) do
-    {:ok, datetime} = DateTime.from_unix(datetime)
+  def transform(integer, :time) when is_integer(integer) do
+    {:ok, datetime} = DateTime.from_unix(integer)
     Time.from_erl({datetime.hour, datetime.minute, datetime.second})
   end
 
-  def transform(datetime, :naive_datetime) when is_integer(datetime) do
-    {:ok, datetime} = DateTime.from_unix(datetime)
+  def transform(integer, :naive_datetime) when is_integer(integer) do
+    {:ok, datetime} = DateTime.from_unix(integer)
     NaiveDateTime.from_erl({
       {datetime.year, datetime.month,  datetime.day},
       {datetime.hour, datetime.minute, datetime.second}
     })
   end
 
-  def transform(source, :integer) when is_float(source) do
-    {:ok, trunc(source)}
+  def transform(float, :integer) when is_float(float) do
+    {:ok, trunc(float)}
   end
 
   def transform(source=%Decimal{}, :integer) do
@@ -66,6 +62,10 @@ defmodule Transform.Type do
     {:ok, !Decimal.equal?(source, Decimal.new(0))}
   end
 
+  def transform(any, target) when target in [:string, :binary] do
+    {:ok, to_string(any)}
+  end
+  
   def transform(source, :boolean) when is_binary(source) do
     {:ok, source !== "false"}
   end
@@ -116,6 +116,10 @@ defmodule Transform.Type do
   end
  
   def transform(value = %Date{}, :string, options, locale) when is_binary(options) do
+    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
+  end
+ 
+  def transform(value = %DateTime{}, :string, options, locale) when is_binary(options) do
     Timex.Format.DateTime.Formatter.lformat(value, options, locale)
   end
  
