@@ -3,7 +3,7 @@ defmodule Transform.DateTest do
   import Transform.Transformer
 
   defmodule Source do
-    defstruct [:dob1, :dob2]
+    defstruct [:dob1, :dob2, :locale]
   end
 
   defmodule Example do
@@ -34,8 +34,22 @@ defmodule Transform.DateTest do
     end
   end
 
-  test "parse date with locale" do
+  test "parse date with locale defined in transform" do
     result = transform %Source{dob1: ~D[2001-01-01]}, WithExplicitLocale
+    assert result.dob1 == "janvier 1, 2001"
+  end
+
+  defmodule WithLocaleFromStruct do
+    use Transform.Transform
+
+    transform do
+      locale :locale
+      field :dob1, string: "{Mfull} {D}, {YYYY}"
+    end
+  end
+
+  test "parse date with locale from struct" do
+    result = transform %Source{dob1: ~D[2001-01-01], locale: "fr"}, WithLocaleFromStruct
     assert result.dob1 == "janvier 1, 2001"
   end
 end

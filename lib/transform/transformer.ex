@@ -10,7 +10,7 @@ defmodule Transform.Transformer do
   end
 
   def transform(value, mod) when is_atom(mod) do
-    transform value, mod.__transform__(:transforms), mod.__transform__(:locale)[:out]
+    transform value, mod.__transform__(:transforms), locale(value, mod)
   end
 
   def transform(value, transform, locale \\ "en") 
@@ -48,5 +48,15 @@ defmodule Transform.Transformer do
 
   def transform(value, transform, options, locale) do
     Type.transform(value, transform, options, locale)
+  end
+
+  defp locale(map, mod) do
+    locale = mod.__transform__(:locale)
+
+    if is_atom(locale) do
+      Map.get(map, locale)
+    else
+      locale[:out]
+    end
   end
 end

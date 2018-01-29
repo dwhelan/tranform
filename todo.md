@@ -1,5 +1,5 @@
-# To do
 ## General
+* use field strings as well as atoms
 * support transforms that don't take args
     * field :x, :downcase, :upcase
     * field :y, date: "YYYY", string: "YY", lowercase :_
@@ -18,9 +18,9 @@
 
 ## Dates & Times
 * handle locales
-* have default date parsing return naive_datetimes
+    * from transform struct field with map
 * support timezones (already handled I think - add tests)
     * provide timezone when converting to DateTime
 
 ## Maps
-* remove custom struct and map modules?
+* remove custom struct and map modules? have them recurse?
