@@ -33,6 +33,12 @@ defmodule Transform.Transform do
     end
   end
 
+  defmacro locale(locale, map) do
+    quote bind_quoted: [locale: locale, map: map] do
+      Module.put_attribute __MODULE__, :locale, {locale, map}
+    end
+  end
+
   defmacro field(name, transforms \\ []) do
     quote bind_quoted: [name: name, transforms: remove_greater_than(transforms)] do
       Module.put_attribute __MODULE__, :transforms, {name, transforms}

@@ -17,8 +17,6 @@
 * handle decimal errors - will error when there is a loss of precision
 
 ## Dates & Times
-* handle locales
-    * from transform struct field with map
 * support timezones (already handled I think - add tests)
     * provide timezone when converting to DateTime
 

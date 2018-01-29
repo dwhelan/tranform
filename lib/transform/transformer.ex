@@ -52,11 +52,21 @@ defmodule Transform.Transformer do
 
   defp locale(map, mod) do
     locale = mod.__transform__(:locale)
+    extract_out_locale(map, locale)
+  end
 
-    if is_atom(locale) do
-      Map.get(map, locale)
-    else
-      locale[:out]
-    end
+  defp extract_out_locale(map, atom) when is_atom(atom) do
+    Map.get(map, atom)
+  end
+
+  defp extract_out_locale(map, locale) when is_tuple(locale) do
+    locale_key = Map.get(map, elem(locale, 0))
+    elem(locale, 1)
+    |> Enum.find(fn {key, _} -> to_string(key) == locale_key end)
+    |> elem(1)
+  end
+
+  defp extract_out_locale(_map, locale) when is_list(locale) do
+    locale[:out]
   end
 end
