@@ -29,8 +29,12 @@ defmodule Transform.Type do
     {:ok, to_string(any)}
   end
   
-  def transform(integer, target) when is_integer(integer) and target in [:integer, :utc_datetime] do
+  def transform(integer, :integer) when is_integer(integer) do
     {:ok, integer}
+  end
+  
+  def transform(integer, :utc_datetime) when is_integer(integer) do
+    DateTime.from_unix(integer)
   end
 
   def transform(utc_datetime, :time) when is_integer(utc_datetime) do

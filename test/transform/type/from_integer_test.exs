@@ -36,7 +36,7 @@ defmodule Transformer.Type.FromIntegerTest do
     end
 
     test ":utc_datetime" do
-      assert transform(0, :utc_datetime) === {:ok, 0}
+      assert transform(0, :utc_datetime) === DateTime.from_unix(0)
     end
 
     test ":time" do
