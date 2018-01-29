@@ -19,7 +19,7 @@ defmodule Transform.DateTest do
 
   test "date with options" do
     result = transform %Source{dob1: "2001-01-01"}, Example
-    assert result.dob1 == ~N[2001-01-01 00:00:00]
+    assert result.dob1 == ~D[2001-01-01]
   end
 
   test "date with parse and options list" do

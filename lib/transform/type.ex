@@ -112,7 +112,12 @@ defmodule Transform.Type do
     Timex.Format.DateTime.Formatter.format(value, options)
   end
  
-  def transform(string, date, options) when is_binary(string) and date in [:date, :naive_datetime] and is_binary(options) do
+  def transform(string, :date, options) when is_binary(string) and is_binary(options) do
+    {:ok, naive_datetime} = transform(string, :naive_datetime, options)
+    transform(naive_datetime, :date)
+  end
+ 
+  def transform(string, :naive_datetime, options) when is_binary(string) and is_binary(options) do
     Timex.Parse.DateTime.Parser.parse(string, options)
   end
 

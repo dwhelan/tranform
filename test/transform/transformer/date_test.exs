@@ -10,7 +10,7 @@ defmodule Transform.Transformer.DateTest do
 
     test "string => :date with options" do
       {:ok, result} = transform "2001-01-01", :date, "{YYYY}-{0M}-{0D}"
-      assert result == ~N[2001-01-01 00:00:00]
+      assert result == ~D[2001-01-01]
     end
 
     test "string => :date with parse and format options" do
@@ -25,7 +25,7 @@ defmodule Transform.Transformer.DateTest do
 
     test ":date => string with options" do
       {:ok, result} = transform "2001-01-01", date: "{YYYY}-{0M}-{0D}"
-      assert result == ~N[2001-01-01 00:00:00]
+      assert result == ~D[2001-01-01]
     end
   end
 end

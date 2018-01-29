@@ -35,6 +35,10 @@ defmodule Transformer.Type.FromStringTest do
       assert transform("1970-01-01", :date) === {:ok, ~D[1970-01-01]}
     end
 
+    test ":date with format" do
+      assert transform("1970-01-01", :date, "{YYYY}-{0M}-{0D}") === {:ok, ~D[1970-01-01]}
+    end
+
     test ":naive_datetime" do
       assert transform("1970-01-01 00:00:00", :naive_datetime) === {:ok, ~N[1970-01-01 00:00:00]}
     end
