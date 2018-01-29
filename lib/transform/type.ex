@@ -110,16 +110,8 @@ defmodule Transform.Type do
   # With options
 
   def transform(value, transformation, options, locale \\ "en")
-
-  def transform(value = %NaiveDateTime{}, :string, options, locale) when is_binary(options) do
-    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
-  end
  
-  def transform(value = %Date{}, :string, options, locale) when is_binary(options) do
-    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
-  end
- 
-  def transform(value = %DateTime{}, :string, options, locale) when is_binary(options) do
+  def transform(value, :string, options, locale) when is_binary(options) do
     Timex.Format.DateTime.Formatter.lformat(value, options, locale)
   end
  
