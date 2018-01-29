@@ -11,8 +11,8 @@ defmodule Transformer.Type.FromNaiveDateTimeTest do
       assert transform(~N[1970-01-01 00:00:00], :naive_datetime) === {:ok, ~N[1970-01-01 00:00:00]}
     end
 
-    test ":utc_datetime" do
-      assert transform(~N[1970-01-01 00:00:00], :utc_datetime) === DateTime.from_unix(0)
+    test ":datetime" do
+      assert transform(~N[1970-01-01 00:00:00], :datetime) === DateTime.from_unix(0)
     end
 
     test ":time" do

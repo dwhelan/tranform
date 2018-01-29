@@ -13,10 +13,10 @@ defmodule Transform.Type do
   * :date
   * :naive_datetime
   * :time
-  * :utc_datetime
+  * :datetime
 
   The following Ecto types not supported:
-  * :utc_datetime_usec
+  * :datetime_usec
   * :naive_datetime_usec
   * :time_usec
   """
@@ -33,17 +33,17 @@ defmodule Transform.Type do
     {:ok, integer}
   end
   
-  def transform(integer, :utc_datetime) when is_integer(integer) do
+  def transform(integer, :datetime) when is_integer(integer) do
     DateTime.from_unix(integer)
   end
 
-  def transform(utc_datetime, :time) when is_integer(utc_datetime) do
-    {:ok, datetime} = DateTime.from_unix(utc_datetime)
+  def transform(datetime, :time) when is_integer(datetime) do
+    {:ok, datetime} = DateTime.from_unix(datetime)
     Time.from_erl({datetime.hour, datetime.minute, datetime.second})
   end
 
-  def transform(utc_datetime, :naive_datetime) when is_integer(utc_datetime) do
-    {:ok, datetime} = DateTime.from_unix(utc_datetime)
+  def transform(datetime, :naive_datetime) when is_integer(datetime) do
+    {:ok, datetime} = DateTime.from_unix(datetime)
     NaiveDateTime.from_erl({
       {datetime.year, datetime.month,  datetime.day},
       {datetime.hour, datetime.minute, datetime.second}
@@ -90,13 +90,17 @@ defmodule Transform.Type do
     NaiveDateTime.new(value, ~T[00:00:00])
   end
 
-  def transform(value = %Date{}, :utc_datetime) do
+  def transform(value = %Date{}, :datetime) do
     {:ok, naive_datetime} = transform(value, :naive_datetime)
     DateTime.from_naive naive_datetime, "Etc/UTC"
   end
 
   def transform(_value = %Date{}, :time) do
     {:ok, ~T[00:00:00]}
+  end
+
+  def transform(source, :datetime) do
+    Ecto.Type.cast(:utc_datetime, source)
   end
 
   def transform(source, target) do
