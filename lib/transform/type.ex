@@ -20,6 +20,7 @@ defmodule Transform.Type do
   * :time_usec
   """
   
+  
   def transform(nil, _) do
     {:ok, nil}
   end
@@ -100,38 +101,46 @@ defmodule Transform.Type do
 
   # With options
 
-  def transform(string, :date, options) when is_binary(string) and is_list(options) do
-    [parse_options | [format_options | _ ]] = options
-    {:ok, value} = transform(string, :date, parse_options)
-    transform(value, :string, format_options)
-  end
+  # def transform(string, :date, options) when is_binary(string) and is_list(options) do
+  #   [parse_options | [format_options | _ ]] = options
+  #   {:ok, value} = transform(string, :date, parse_options)
+  #   transform(value, :string, format_options)
+  # end
 
-  def transform(value = %NaiveDateTime{}, :string, options) when is_binary(options) do
-    Timex.Format.DateTime.Formatter.format(value, options)
-  end
- 
-  def transform(value = %Date{}, :string, options) when is_binary(options) do
-    Timex.Format.DateTime.Formatter.format(value, options)
-  end
- 
-  def transform(string, :date, options) when is_binary(string) and is_binary(options) do
-    {:ok, naive_datetime} = transform(string, :naive_datetime, options)
-    transform(naive_datetime, :date)
-  end
- 
-  def transform(string, :naive_datetime, options) when is_binary(string) and is_binary(options) do
-    Timex.Parse.DateTime.Parser.parse(string, options)
-  end
-
-  # With options and locale
-
-  def transform(value = %Date{}, :string, options, locale) when is_binary(options) do
-    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
-  end
+  # def transform(string, :date, options, locale) when is_binary(string) and is_list(options) do
+  #   [parse_options | [format_options | _ ]] = options
+  #   {:ok, value} = transform(string, :date, parse_options)
+  #   transform(value, :string, format_options, locale)
+  # end
+  def transform(value, transformation, options, locale \\ "en")
 
   def transform(value = %NaiveDateTime{}, :string, options, locale) when is_binary(options) do
     Timex.Format.DateTime.Formatter.lformat(value, options, locale)
   end
+ 
+  def transform(value = %Date{}, :string, options, locale) when is_binary(options) do
+    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
+  end
+ 
+  def transform(string, :date, options, _locale) when is_binary(string) and is_binary(options) do
+    {:ok, naive_datetime} = transform(string, :naive_datetime, options)
+    transform(naive_datetime, :date)
+  end
+ 
+  def transform(string, :naive_datetime, options, _locale) when is_binary(string) and is_binary(options) do
+    Timex.Parse.DateTime.Parser.parse(string, options)
+  end
+
+  # With options and locale
+  # def transform(value, transformation, options, locale \\ "en")
+  
+  # def transform(value = %Date{}, :string, options, locale) when is_binary(options) do
+  #   Timex.Format.DateTime.Formatter.lformat(value, options, locale)
+  # end
+
+  # def transform(value = %NaiveDateTime{}, :string, options, locale) when is_binary(options) do
+  #   Timex.Format.DateTime.Formatter.lformat(value, options, locale)
+  # end
  
 
   def primitive?(target) do
