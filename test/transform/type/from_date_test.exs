@@ -23,6 +23,14 @@ defmodule Transformer.Type.FromDateTest do
       assert transform(~D[1970-01-01], :string) === {:ok, "1970-01-01"}
     end
 
+    test ":string with options" do
+      assert transform(~D[1970-01-01], :string, "{Mfull} 1, {YYYY}") === {:ok, "January 1, 1970"}
+    end
+    
+    test ":string with options and locale" do
+      assert transform(~D[1970-01-01], :string, "{Mfull} 1, {YYYY}", "fr") === {:ok, "janvier 1, 1970"}
+    end
+
     test ":binary" do
       assert transform(~D[1970-01-01], :binary) === {:ok, "1970-01-01"}
     end

@@ -98,6 +98,8 @@ defmodule Transform.Type do
     Ecto.Type.cast(target, source)
   end
 
+  # With options
+
   def transform(string, :date, options) when is_binary(string) and is_list(options) do
     [parse_options | [format_options | _ ]] = options
     {:ok, value} = transform(string, :date, parse_options)
@@ -120,6 +122,12 @@ defmodule Transform.Type do
   def transform(string, :naive_datetime, options) when is_binary(string) and is_binary(options) do
     Timex.Parse.DateTime.Parser.parse(string, options)
   end
+
+  # With options and locale
+  def transform(value = %Date{}, :string, options, locale) when is_binary(options) do
+    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
+  end
+ 
 
   def primitive?(target) do
     Ecto.Type.primitive? target

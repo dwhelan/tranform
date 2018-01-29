@@ -2,7 +2,7 @@ defmodule Transformer.Type.FromStringTest do
   use ExUnit.Case
   import Transform.Type
 
-  describe "String to" do
+  describe "from string to" do
     test ":boolean ('false')" do
       assert transform("false", :boolean) === {:ok, false}
     end
@@ -48,7 +48,7 @@ defmodule Transformer.Type.FromStringTest do
     end
   end
 
-  describe "String with options to" do
+  describe "from string with options to" do
     test ":date" do
       assert transform("1970-01-01", :date, "{YYYY}-{0M}-{0D}") === {:ok, ~D[1970-01-01]}
     end

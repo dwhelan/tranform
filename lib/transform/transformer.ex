@@ -1,11 +1,12 @@
 defmodule Transform.Transformer do
-  
+  alias Transform.Type
+
   def transform(nil, _) do
     {:ok, nil}
   end
 
   def transform(value, transform) when transform in [:string, :date] do
-    Transform.Type.transform(value, transform)
+    Type.transform(value, transform)
   end
 
   def transform(value, mod) when is_atom(mod) do
@@ -25,11 +26,11 @@ defmodule Transform.Transformer do
   end
 
   def transform(value, {transform, options}) do
-    Transform.Type.transform(value, transform, options)
+    Type.transform(value, transform, options)
   end
 
   def transform(value, transform) when is_atom(transform) do
-    Transform.Type.transform(value, transform)
+    Type.transform(value, transform)
   end
 
   def transform(map, key, transforms) when is_map(map) and is_list(transforms) do
@@ -40,6 +41,6 @@ defmodule Transform.Transformer do
   end
 
   def transform(value, transform, options) do
-    Transform.Type.transform(value, transform, options)
+    Type.transform(value, transform, options)
   end
 end
