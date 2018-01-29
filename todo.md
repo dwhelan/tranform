@@ -20,5 +20,16 @@
 * support timezones (already handled I think - add tests)
     * provide timezone when converting to DateTime
 
-## Maps
-* remove custom struct and map modules? have them recurse?
+## Maps & Structs 
+* remove custom struct and map modules? have them recurse? 
+ 
+## Locale 
+* error handling 
+    * nothing entered 
+    * string is not a valid locale 
+    * field is not in the struct being transformed 
+    * keys in locale map are not valid fields 
+    * values in locale map are not valid locales 
+    * field value is not a valid locale 
+    * perhaps default to "en" on error (configurable) 
+
