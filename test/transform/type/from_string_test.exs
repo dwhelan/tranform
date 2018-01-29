@@ -35,9 +35,17 @@ defmodule Transformer.Type.FromStringTest do
       assert transform("1970-01-01", :date) === {:ok, ~D[1970-01-01]}
     end
 
+    test ":date with options" do
+      assert transform("1970-01-01", :date, "{YYYY}-{0M}-{0D}") === {:ok, ~D[1970-01-01]}
+    end
+
     test ":naive_datetime" do
       assert transform("1970-01-01 00:00:00", :naive_datetime) === {:ok, ~N[1970-01-01 00:00:00]}
     end
+
+    test ":naive_datetime with options" do 
+      assert transform("1970-01-01 00:00:00", :naive_datetime, "{YYYY}-{0M}-{0D} {h24}:{m}:{s}") === {:ok, ~N[1970-01-01 00:00:00]} 
+    end 
 
     test ":utc_datetime" do
       assert transform("1970-01-01 00:00:00", :utc_datetime) === DateTime.from_unix(0)
@@ -46,15 +54,5 @@ defmodule Transformer.Type.FromStringTest do
     test ":time" do
       assert transform("00:00:00", :time) === {:ok, ~T[00:00:00]}
     end
-  end
-
-  describe "from string with options to" do
-    test ":date" do
-      assert transform("1970-01-01", :date, "{YYYY}-{0M}-{0D}") === {:ok, ~D[1970-01-01]}
-    end
-
-    test ":naive_datetime" do 
-      assert transform("1970-01-01 00:00:00", :naive_datetime, "{YYYY}-{0M}-{0D} {h24}:{m}:{s}") === {:ok, ~N[1970-01-01 00:00:00]} 
-    end 
   end
 end
