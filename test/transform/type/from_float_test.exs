@@ -30,5 +30,9 @@ defmodule Transformer.Type.FromFloatTest do
     test ":binary" do
       assert transform(123.0, :string) === {:ok, "123.0"}
     end
+
+    test ":currency" do
+      assert transform(1234.56, :currency) === {:ok, "1,234.56"}
+    end
   end
 end

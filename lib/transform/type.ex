@@ -99,6 +99,15 @@ defmodule Transform.Type do
     {:ok, ~T[00:00:00]}
   end
 
+  def transform(value, :currency) when is_binary(value) do
+    {:ok, decimal} = transform(value, :decimal)
+    Cldr.Number.to_string(decimal)
+  end
+
+  def transform(value, :currency) do
+    Cldr.Number.to_string(value)
+  end
+
   def transform(source, :datetime) do
     Ecto.Type.cast(:utc_datetime, source)
   end

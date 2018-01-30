@@ -30,5 +30,9 @@ defmodule Transformer.Type.FromDecimalTest do
     test ":binary" do
       assert transform(Decimal.new(123), :binary) === {:ok, "123"}
     end
+
+    test ":currency" do
+      assert transform(Decimal.new(1234.56), :currency) === {:ok, "1,234.56"}
+    end
   end
 end

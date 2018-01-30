@@ -54,5 +54,9 @@ defmodule Transformer.Type.FromStringTest do
     test ":time" do
       assert transform("00:00:00", :time) === {:ok, ~T[00:00:00]}
     end
+
+    test ":currency" do
+      assert transform("1234.56", :currency) === {:ok, "1,234.56"}
+    end
   end
 end
