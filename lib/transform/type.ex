@@ -101,11 +101,11 @@ defmodule Transform.Type do
 
   def transform(value, :currency) when is_binary(value) do
     {:ok, decimal} = transform(value, :decimal)
-    Cldr.Number.to_string(decimal)
+    transform(decimal, :currency)
   end
 
   def transform(value, :currency) do
-    Cldr.Number.to_string(value)
+    Cldr.Number.to_string(value, format: "$#,##0.##")
   end
 
   def transform(source, :datetime) do

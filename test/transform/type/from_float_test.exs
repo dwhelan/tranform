@@ -32,7 +32,7 @@ defmodule Transformer.Type.FromFloatTest do
     end
 
     test ":currency" do
-      assert transform(1234.56, :currency) === {:ok, "1,234.56"}
+      assert transform(1234.56, :currency) === {:ok, "$1,234.56"}
     end
   end
 end

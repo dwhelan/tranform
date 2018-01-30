@@ -44,7 +44,7 @@ defmodule Transformer.Type.FromIntegerTest do
     end
 
     test ":currency" do
-      assert transform(1234, :currency) === {:ok, "1,234"}
+      assert transform(1234, :currency) === {:ok, "$1,234"}
     end
   end
 end
