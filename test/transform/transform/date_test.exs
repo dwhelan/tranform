@@ -48,7 +48,6 @@ defmodule Transform.DateTest do
     end
   end
 
-  @tag :focus
   test "parse date with locale from struct" do
     result = transform %Source{dob1: ~D[2001-01-01], locale: "fr"}, WithLocaleFromStruct
     assert result.dob1 == "janvier 1, 2001"

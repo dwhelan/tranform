@@ -133,6 +133,11 @@ defmodule Transform.Type do
     Timex.Parse.DateTime.Parser.parse(string, options)
   end
 
+  def transform(value, :currency, options, locale) when is_binary(value) do
+    {:ok, decimal} = transform(value, :decimal)
+    transform(decimal, :currency, options, locale)
+  end
+
   def transform(value, :currency, options, locale) do
     Cldr.Number.to_string(value, format: options, locale: locale) |> replace_non_breaking_spaces
   end
