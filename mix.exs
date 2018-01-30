@@ -20,8 +20,9 @@ defmodule Transform.Mixfile do
 
   defp deps do
     [
-      {:ecto,           "~> 2.1"},
-      {:mix_test_watch, "~> 0.5", only: :dev},
+      {:ex_cldr_numbers, "~> 1.0"},
+      {:ecto,            "~> 2.1"},
+      {:mix_test_watch,  "~> 0.5", only: :dev},
       {:timex,           "~> 3.0"},
     ]
   end
