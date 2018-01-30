@@ -105,7 +105,7 @@ defmodule Transform.Type do
   end
 
   def transform(value, :currency) do
-    Cldr.Number.to_string(value, format: "$#,##0.##")
+    transform(value, :currency, "$#,##0.##")
   end
 
   def transform(source, :datetime) do
@@ -133,6 +133,13 @@ defmodule Transform.Type do
     Timex.Parse.DateTime.Parser.parse(string, options)
   end
 
+  def transform(value, :currency, options, locale) do
+    Cldr.Number.to_string(value, format: options, locale: locale) |> replace_non_breaking_spaces
+  end
+
+  defp replace_non_breaking_spaces({:ok, string}) do
+    {:ok, String.replace(string, ~r/\s/u, " ")}
+  end
 
   def primitive?(target) do
     Ecto.Type.primitive? target

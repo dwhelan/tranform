@@ -46,5 +46,13 @@ defmodule Transformer.Type.FromIntegerTest do
     test ":currency" do
       assert transform(1234, :currency) === {:ok, "$1,234"}
     end
+
+    test ":currency with options" do
+      assert transform(1234, :currency, "$USD #,###.##") === {:ok, "$USD 1,234"}
+    end
+
+    test ":currency with options and locale" do
+      assert transform(1234, :currency, "#,###.##", "fr") === {:ok, "1 234"}
+    end
   end
 end

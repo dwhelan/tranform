@@ -34,5 +34,13 @@ defmodule Transformer.Type.FromFloatTest do
     test ":currency" do
       assert transform(1234.56, :currency) === {:ok, "$1,234.56"}
     end
+
+    test ":currency with options" do
+      assert transform(1234.56, :currency, "$USD #,###.##") === {:ok, "$USD 1,234.56"}
+    end
+
+    test ":currency with options and locale" do
+      assert transform(1234.56, :currency, "#,###.##", "fr") === {:ok, "1 234,56"}
+    end
   end
 end
