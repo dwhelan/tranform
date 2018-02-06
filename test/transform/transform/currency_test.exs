@@ -29,7 +29,7 @@ defmodule Transform.CurrencyTest do
     end
   end
 
-  test "parse date with locale defined in transform" do
+  test "parse currency with locale defined in transform" do
     result = transform %Source{value1: 1234.56}, WithExplicitLocale
     assert result.value1 == "$ 1 234,56 USD"
   end
@@ -43,7 +43,7 @@ defmodule Transform.CurrencyTest do
     end
   end
 
-  test "parse date with locale from struct" do
+  test "parse currency with locale from struct" do
     result = transform %Source{value1: 1234.56, locale: "fr"}, WithLocaleFromStruct
     assert result.value1 == "$ 1 234,56 USD"
   end
@@ -57,7 +57,7 @@ defmodule Transform.CurrencyTest do
     end
   end
 
-  test "parse date with locale from struct with map" do
+  test "parse currency with locale from struct with map" do
     result = transform %Source{value1: 1234.56, locale: "F"}, WithLocaleFromStructViaMap
     assert result.value1 == "$ 1 234,56 USD"
   end
