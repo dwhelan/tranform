@@ -1,4 +1,7 @@
 ## General
+* support func transforms
+* support module transforms
+* support inherited transforms?
 * use field strings as well as atoms
 * support transforms that don't take args
     * field :x, :downcase, :upcase
@@ -22,7 +25,7 @@
 
 ## Maps & Structs 
 * remove custom struct and map modules? have them recurse? 
- 
+
 ## Locale 
 * error handling 
     * nothing entered 
