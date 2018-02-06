@@ -23,6 +23,10 @@ defmodule Transform.Transformer do
     Enum.reduce transforms, value, &transform(&2, &1, locale)
   end  
 
+  def transform(map, {:string, transforms}, locale) when is_map(map) and is_list(transforms) do
+    transform(map, :string, transforms[String.to_atom(locale)], locale)
+  end  
+
   def transform(map, {key, transforms}, locale) when is_map(map) and is_list(transforms) do
     transform(map, key, transforms, locale)
   end  
