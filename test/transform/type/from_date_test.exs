@@ -30,7 +30,7 @@ defmodule Transformer.Type.FromDateTest do
     test ":string with options and locale" do
       assert transform(~D[1970-01-01], :string, "{Mfull} {D}, {YYYY}", "fr") === {:ok, "janvier 1, 1970"}
     end
-    
+
     test ":string with multiple options and locale" do
       locale_format = ["fr": "{D} {Mfull}, {YYYY}", "en": "{Mfull} {D}, {YYYY}"]
       assert transform(~D[1970-01-01], :string, locale_format, "en") === {:ok, "January 1, 1970"}

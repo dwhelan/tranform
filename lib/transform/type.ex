@@ -120,15 +120,14 @@ defmodule Transform.Type do
 
   def transform(value, transformation, options, locale \\ "en")
  
-  def transform(value, :string, options, locale) when is_binary(options) do
-    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
-  end
- 
   def transform(value, :string, options, locale) when is_list(options) do
-    IO.inspect {:transform4, value, :string, options, locale}
     locale_atom = String.to_atom(locale)
     locale_format = options[locale_atom]
-    Timex.Format.DateTime.Formatter.lformat(value, locale_format, locale)
+    transform(value, :string, locale_format, locale)
+  end
+
+  def transform(value, :string, options, locale) when is_binary(options) do
+    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
   end
  
   def transform(string, :date, options, _locale) when is_binary(string) and is_binary(options) do
