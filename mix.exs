@@ -20,7 +20,7 @@ defmodule Transform.Mixfile do
 
   defp deps do
     [
-      {:ex_cldr,         "~> 1.0"},
+      {:ex_cldr,         "== 1.3.2"},
       {:ex_cldr_numbers, "~> 1.0"},
       {:ecto,            "~> 2.1"},
       {:mix_test_watch,  "~> 0.5", only: :dev},
