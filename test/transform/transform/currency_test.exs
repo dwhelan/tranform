@@ -3,7 +3,7 @@ defmodule Transform.CurrencyTest do
   import Transform.Transformer
 
   defmodule Source do
-    defstruct [:value1, :value2, :locale]
+    defstruct [:value1, :locale]
   end
 
   defmodule Example do
@@ -11,7 +11,6 @@ defmodule Transform.CurrencyTest do
 
     transform do
       field :value1, currency:  "$ #,###.## USD"
-      field :value2, date:  "{YYYY}-{0M}-{0D}", string: "{Mfull} {D}, {YYYY}"
     end
   end
 
@@ -53,7 +52,7 @@ defmodule Transform.CurrencyTest do
 
     transform do
       locale :locale, "F": "fr", "E": "en"
-      field :value1, currency:  "$ #,###.## USD"
+      field :value1, currency: "$ #,###.## USD"
     end
   end
 
