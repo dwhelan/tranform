@@ -15,6 +15,16 @@
     * write guides for the transformations?
 * consider lossy conversions as errors?
 
+## Strings
+* support trim options
+    * trim :none #default
+    * trim :leading # remove leading whitespace
+    * trim :trailing # remove trailing whitespace
+    * trim :leading, :trailing # remove leading & trailing whitespace
+    * trim leading: " ",   
+    * trim trailing: " ",   
+    * trim leading: " ", trailing: " ",   
+
 ## Numbers
 * support format/parse options
 * handle decimal errors - will error when there is a loss of precision
