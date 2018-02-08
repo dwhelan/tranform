@@ -22,10 +22,21 @@ defmodule Transform.Transformer do
     {:ok, nil}
   end
 
+  # applies a single transform to value
+
+  def transform(value, transform, opts) when is_atom(transform) and is_list(opts) do
+    IO.inspect :transformer8
+    Type.transform(value, transform, opts)
+  end
+
+  # applies a list of transforms to value
+
   def transform(value, transforms, opts) when is_list(transforms) and is_list(opts) do
     IO.inspect :transformer3
     Enum.reduce transforms, value, &transform(&2, &1, opts)
   end  
+
+  # handles "field :x, string: [en: ..., fr: ...]" where the locale is used to determine format
 
   def transform(map, {:string, transforms}, opts) when is_map(map) and is_list(transforms) and is_list(opts) do
     IO.inspect :transformer4
@@ -34,37 +45,17 @@ defmodule Transform.Transformer do
   end  
 
   def transform(map, {key, transforms}, opts) when is_map(map) and is_list(transforms) and is_list(opts) do
-    IO.inspect :transformer5
-    transform(map, key, transforms, opts)
-  end  
-
-  def transform(value, transforms, opts) when is_list(transforms) and is_list(opts) do
-    IO.inspect :transformer6
-    Enum.reduce transforms, value, &transform(&2, &1, opts)
+    IO.inspect {:transformer5, {key, transforms}, opts}
+    Enum.reduce(transforms, map, fn transform, input ->
+      {:ok, value} = transform(Map.get(input, key), transform, opts)
+      Map.put(input, key, value)
+    end)
   end  
 
   def transform(value, {transform, format}, opts) when is_list(opts) do
     IO.inspect {:transformer7, value, format, opts}
     opts = Keyword.put(opts, :format, format)
     Type.transform(value, transform, opts)
-  end
-
-  def transform(value, transform, opts) when is_atom(transform) and is_list(opts) do
-    IO.inspect :transformer8
-    Type.transform(value, transform, opts)
-  end
-
-  def transform(map, key, transforms, opts) when is_map(map) and is_list(transforms) and is_list(opts) do
-    IO.inspect :transformer9
-    Enum.reduce(transforms, map, fn transform, input ->
-      {:ok, value} = transform(Map.get(input, key), transform, opts)
-      Map.put(input, key, value)
-    end)
-  end
-
-  def transform(value, transform, format, opts) when is_list(opts) do
-    IO.inspect :transformer10
-    Type.transform(value, transform, format, opts)
   end
 
   defp locale(map, mod) do

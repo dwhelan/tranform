@@ -1,4 +1,5 @@
 ## General
+* do safe to_atom/1 calls
 * support func transforms
 * support module transforms
 * support inherited transforms?
@@ -8,6 +9,7 @@
     * field :y, date: "YYYY", string: "YY", lowercase :_
 * handle errors - always return tuples
 * remove need for primitive? call
+* refactor tranform/2 functions to Ecto casting (will enable auto transformations to/from databases)
 * documentation
     * process/app config for locale
     * available locales see Timex/priv/translations
@@ -45,4 +47,3 @@
     * values in locale map are not valid locales 
     * field value is not a valid locale 
     * perhaps default to "en" on error (configurable) 
-

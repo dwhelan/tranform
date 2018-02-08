@@ -7,8 +7,8 @@ defmodule Transformer.TypeTest do
   end
 
   describe "primitive?" do
-    test ":binary" do
-      assert primitive?(:binary)
+    test ":string" do
+      assert primitive?(:string)
     end
   end
 end
