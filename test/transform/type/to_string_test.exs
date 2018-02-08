@@ -31,12 +31,16 @@ defmodule Transformer.Type.ToStringTest do
       assert transform(Decimal.new(123), :string) === {:ok, "123"}
     end
 
+    test "from Time" do
+      assert transform(~T[00:00:00], :string) === {:ok, "00:00:00"}
+    end
+
     test "from Date" do
       assert transform(~D[1970-01-01], :string) === {:ok, "1970-01-01"}
     end
 
     test "from Date with format" do
-      assert transform(~D[1970-01-01], :string, "{Mfull} {D}, {YYYY}") === {:ok, "January 1, 1970"}
+      assert transform(~D[1970-01-01], :string, format: "{Mfull} {D}, {YYYY}") === {:ok, "January 1, 1970"}
     end
     
     test "from Date with format and locale" do
@@ -44,13 +48,9 @@ defmodule Transformer.Type.ToStringTest do
     end
 
     test "from Date with multiple localized formats" do
-      locale_format = ["fr": "{D} {Mfull}, {YYYY}", "en": "{Mfull} {D}, {YYYY}"]
-      assert transform(~D[1970-01-01], :string, locale_format, "en") === {:ok, "January 1, 1970"}
-      assert transform(~D[1970-01-01], :string, locale_format, "fr") === {:ok, "1 janvier, 1970"}
-    end
-
-    test "from Time" do
-      assert transform(~T[00:00:00], :string) === {:ok, "00:00:00"}
+      format = ["fr": "{D} {Mfull}, {YYYY}", "en": "{Mfull} {D}, {YYYY}"]
+      assert transform(~D[1970-01-01], :string, format: format, locale: "en") === {:ok, "January 1, 1970"}
+      assert transform(~D[1970-01-01], :string, format: format, locale: "fr") === {:ok, "1 janvier, 1970"}
     end
 
     test "from DateTime" do
@@ -60,12 +60,19 @@ defmodule Transformer.Type.ToStringTest do
 
     test "from DateTime with format" do
       {:ok, datetime} = DateTime.from_unix(0)
-      assert transform(datetime, :string, "{Mfull} 1, {YYYY}") === {:ok, "January 1, 1970"}
+      assert transform(datetime, :string, format: "{Mfull} 1, {YYYY}") === {:ok, "January 1, 1970"}
     end
     
+    test "from DateTime with format and locale" do
+      {:ok, datetime} = DateTime.from_unix(0)
+      assert transform(datetime, :string, format: "{Mfull} 1, {YYYY}", locale: "fr") === {:ok, "janvier 1, 1970"}
+    end
+
     test "from DateTime with multiple localized formats" do
       {:ok, datetime} = DateTime.from_unix(0)
-      assert transform(datetime, :string, "{Mfull} 1, {YYYY}", "fr") === {:ok, "janvier 1, 1970"}
+      format = ["fr": "{D} {Mfull}, {YYYY}", "en": "{Mfull} {D}, {YYYY}"]
+      assert transform(datetime, :string, format: format, locale: "en") === {:ok, "January 1, 1970"}
+      assert transform(datetime, :string, format: format, locale: "fr") === {:ok, "1 janvier, 1970"}
     end
 
     test "from NaiveDateTime" do
@@ -78,6 +85,12 @@ defmodule Transformer.Type.ToStringTest do
     
     test "from NaiveDateTime with format and locale" do
       assert transform(~N[1970-01-01 00:00:00], :string, "{Mfull} 1, {YYYY}", "fr") === {:ok, "janvier 1, 1970"}
+    end
+
+    test "from NaiveDateTime with multiple localized formats" do
+      format = ["fr": "{D} {Mfull}, {YYYY}", "en": "{Mfull} {D}, {YYYY}"]
+      assert transform(~N[1970-01-01 00:00:00], :string, format: format, locale: "en") === {:ok, "January 1, 1970"}
+      assert transform(~N[1970-01-01 00:00:00], :string, format: format, locale: "fr") === {:ok, "1 janvier, 1970"}
     end
   end
 end

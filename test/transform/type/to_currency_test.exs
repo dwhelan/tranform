@@ -24,11 +24,11 @@ defmodule Transformer.Type.ToCurrencyTest do
     end
 
     test "from Integer with format" do
-      assert transform(1234, :currency, "$USD #,###.##") === {:ok, "$USD 1,234"}
+      assert transform(1234, :currency, format: "$USD #,###.##") === {:ok, "$USD 1,234"}
     end
 
     test "from Integer with format and locale" do
-      assert transform(1234, :currency, "#,###.##", "fr") === {:ok, "1 234"}
+      assert transform(1234, :currency, format: "#,###.##", locale: "fr") === {:ok, "1 234"}
     end
 
     test "from Float" do
@@ -36,11 +36,11 @@ defmodule Transformer.Type.ToCurrencyTest do
     end
 
     test "from Float with format" do
-      assert transform(1234.56, :currency, "$USD #,###.##") === {:ok, "$USD 1,234.56"}
+      assert transform(1234.56, :currency, format: "$USD #,###.##") === {:ok, "$USD 1,234.56"}
     end
 
     test "from Float with format and locale" do
-      assert transform(1234.56, :currency, "#,###.##", "fr") === {:ok, "1 234,56"}
+      assert transform(1234.56, :currency, format: "#,###.##", locale: "fr") === {:ok, "1 234,56"}
     end
 
     test "from Decimal" do

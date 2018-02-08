@@ -6,7 +6,7 @@ defmodule Transform.Type do
   @moduledoc """
   The following Ecto data types are supported:
   * :integer
-  * :binary (also :string)
+  * :string
   * :float
   * :decimal
   * :boolean
@@ -62,7 +62,7 @@ defmodule Transform.Type do
     {:ok, !Decimal.equal?(source, Decimal.new(0))}
   end
 
-  def transform(any, target) when target in [:string, :binary] do
+  def transform(any, :string) do
     {:ok, to_string(any)}
   end
   
@@ -117,71 +117,80 @@ defmodule Transform.Type do
   end
 
   # With formats and locale
+  @default_opts [locale: "en"]
 
   def transform(value, transformation, options, locale \\ "en")
 
-  def transform(value, :string, options = [format: [_|_]], _locale) do
-    IO.inspect "yo"
+  def transform(value, :string, options = [format: format], _locale) when is_list(format) do
+    IO.inspect 1
     transform(value, :string, localize_format(options))
   end
 
-  def transform(value, :string, locale_formats, locale) when is_list(locale_formats) do
-    format = locale_formats[String.to_atom(locale)]
-    transform(value, :string, format, locale)
-  end
-
-  def transform(value, :string, options, _locale) when is_list(options)do
-    Timex.Format.DateTime.Formatter.lformat value, options[:format], options[:locale]
+  def transform(value, :string, opts, _locale) when is_list(opts)do
+    opts = localize_format(opts)
+    Timex.Format.DateTime.Formatter.lformat value, opts[:format], opts[:locale]
   end
  
   def transform(string, :date, options, _locale) when is_binary(string) and is_list(options) do
+    IO.inspect 4
     {:ok, naive_datetime} = transform string, :naive_datetime, options
     transform naive_datetime, :date
   end
  
   def transform(string, :naive_datetime, options, _locale) when is_binary(string) and is_list(options) do
+    IO.inspect 5
     Timex.Parse.DateTime.Parser.parse(string, options[:format])
   end
  
-  def transform(value, :currency, options, _locale) when is_binary(value) do
-    {:ok, decimal} = transform(value, :decimal)
+  def transform(string, :currency, options, _locale) when is_binary(string) do
+    IO.inspect 6
+    {:ok, decimal} = transform(string, :decimal)
     transform(decimal, :currency, options)
   end
 
   def transform(number, :currency, options, _locale) when is_list(options) do
+    IO.inspect 7
     Cldr.Number.to_string(number, options) |> replace_non_breaking_spaces
   end
 
   ## On the death march
 
   def transform(value, :string, format, locale) when is_binary(format) do
+    IO.inspect 91
     Timex.Format.DateTime.Formatter.lformat value, format, locale
   end
 
   def transform(string, :date, format, _locale) when is_binary(string) and is_binary(format) do
+    IO.inspect 92
     {:ok, naive_datetime} = transform(string, :naive_datetime, format)
     transform(naive_datetime, :date)
   end
  
   def transform(string, :naive_datetime, format, _locale) when is_binary(string) and is_binary(format) do
+    IO.inspect 93
     Timex.Parse.DateTime.Parser.parse(string, format)
   end
 
   def transform(value, :currency, format, locale) when is_binary(value) do
+    IO.inspect 94
     {:ok, decimal} = transform(value, :decimal)
     transform(decimal, :currency, format, locale)
   end
 
   def transform(number, :currency, format, locale) do
+    IO.inspect 95
     Cldr.Number.to_string(number, format: format, locale: locale) |> replace_non_breaking_spaces
   end
 
   ## the death match is over
 
-  defp localize_format(options) do
-    locale = options[:locale]
-    format = options[:format]
-    Keyword.put options, :format, format[String.to_atom(locale)]
+  defp localize_format(opts) do
+    opts = Keyword.merge(@default_opts, opts)
+    locale = opts[:locale]
+    case opts[:format] do
+      list when is_list(list) -> Keyword.put(opts, :format, opts[:format][String.to_atom(locale)])
+      _ -> opts
+    end
   end
 
   defp replace_non_breaking_spaces({:ok, string}) do
