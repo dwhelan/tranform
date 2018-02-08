@@ -149,16 +149,16 @@ defmodule Transform.Type do
   end
 
   def transform(number, :currency, options) when is_list(options) do
-    IO.inspect 7
+    IO.inspect :type7
     Cldr.Number.to_string(number, options) |> replace_non_breaking_spaces
   end
 
   ## On the death march
 
-  def transform(value, :string, format, locale) when is_binary(format) do
-    IO.inspect 91
-    Timex.Format.DateTime.Formatter.lformat value, format, locale
-  end
+  # def transform(value, :string, format, locale) when is_binary(format) do
+  #   IO.inspect 91
+  #   Timex.Format.DateTime.Formatter.lformat value, format, locale
+  # end
 
   def transform(string, :date, format) when is_binary(string) and is_binary(format) do
     IO.inspect 92

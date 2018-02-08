@@ -44,7 +44,7 @@ defmodule Transformer.Type.ToStringTest do
     end
     
     test "from Date with format and locale" do
-      assert transform(~D[1970-01-01], :string, "{Mfull} {D}, {YYYY}", "fr") === {:ok, "janvier 1, 1970"}
+      assert transform(~D[1970-01-01], :string, format: "{Mfull} {D}, {YYYY}", locale: "fr") === {:ok, "janvier 1, 1970"}
     end
 
     test "from Date with multiple localized formats" do
