@@ -15,10 +15,6 @@ defmodule Transformer.Type.ToTimeTest do
       assert transform(0, :time) === {:ok, ~T[00:00:00]}
     end
 
-    test "from Date" do
-      assert transform(~D[1970-01-01], :time) === {:ok, ~T[00:00:00]}
-    end
-
     test "from Time" do
       assert transform(~T[00:00:00], :time) === {:ok, ~T[00:00:00]}
     end

@@ -3,6 +3,8 @@ defmodule Transform.Type do
   require Ecto.Type
   require Timex
 
+  @default_opts [locale: "en"]
+
   @moduledoc """
   The following Ecto data types are supported:
   * :integer
@@ -19,24 +21,87 @@ defmodule Transform.Type do
   * :datetime_usec
   * :naive_datetime_usec
   * :time_usec
+  * :binary (use :string)
   """
   
+  # from nil
   def transform(nil, _) do
     {:ok, nil}
   end
   
+  # to :boolean
+
+  def transform(string, :boolean) when is_binary(string) do
+    {:ok, string !== "false"}
+  end
+
+  def transform(number, :boolean) when is_number(number) do
+    {:ok, number != 0}
+  end
+
+  def transform(decimal=%Decimal{}, :boolean) do
+    {:ok, !Decimal.equal?(decimal, Decimal.new(0))}
+  end
+
+  # to :integer
+
+  def transform(boolean, :integer) when is_boolean(boolean) do
+    {:ok, (if boolean, do: 1, else: 0)}
+  end
+
   def transform(integer, :integer) when is_integer(integer) do
     {:ok, integer}
   end
-  
-  def transform(integer, :datetime) when is_integer(integer) do
-    DateTime.from_unix(integer)
+
+  def transform(float, :integer) when is_float(float) do
+    {:ok, trunc(float)}
   end
+
+  def transform(decimal=%Decimal{}, :integer) do
+    {:ok, Decimal.to_integer(decimal)}
+  end
+
+  # to :float
+
+  def transform(boolean, :float) when is_boolean(boolean) do
+    {:ok, (if boolean, do: 1.0, else: 0.0)}
+  end
+
+  def transform(decimal=%Decimal{}, :float) do
+    {:ok, Decimal.to_float(decimal)}
+  end
+
+  # to :decimal
+
+  def transform(boolean, :decimal) when is_boolean(boolean) do
+    {:ok, (if boolean, do: Decimal.new(1), else: Decimal.new(0))}
+  end
+
+  # to :time
 
   def transform(integer, :time) when is_integer(integer) do
     {:ok, datetime} = DateTime.from_unix(integer)
     Time.from_erl({datetime.hour, datetime.minute, datetime.second})
   end
+
+  # to :date
+
+  # to :datetime
+
+  def transform(integer, :datetime) when is_integer(integer) do
+    DateTime.from_unix(integer)
+  end
+
+  def transform(date = %Date{}, :datetime) do
+    {:ok, naive_datetime} = transform(date, :naive_datetime)
+    DateTime.from_naive naive_datetime, "Etc/UTC"
+  end
+
+  def transform(value, :datetime) do
+    Ecto.Type.cast(:utc_datetime, value)
+  end
+
+  # to :naive_datetime
 
   def transform(integer, :naive_datetime) when is_integer(integer) do
     {:ok, datetime} = DateTime.from_unix(integer)
@@ -46,61 +111,14 @@ defmodule Transform.Type do
     })
   end
 
-  def transform(float, :integer) when is_float(float) do
-    {:ok, trunc(float)}
+  def transform(date = %Date{}, :naive_datetime) do
+    NaiveDateTime.new(date, ~T[00:00:00])
   end
 
-  def transform(source=%Decimal{}, :integer) do
-    {:ok, Decimal.to_integer(source)}
-  end
+  # to :currency
 
-  def transform(source=%Decimal{}, :float) do
-    {:ok, Decimal.to_float(source)}
-  end
-
-  def transform(source=%Decimal{}, :boolean) do
-    {:ok, !Decimal.equal?(source, Decimal.new(0))}
-  end
-
-  def transform(any, :string) do
-    {:ok, to_string(any)}
-  end
-  
-  def transform(source, :boolean) when is_binary(source) do
-    {:ok, source !== "false"}
-  end
-
-  def transform(source, :boolean) when is_integer(source) or is_float(source) do
-    {:ok, source != 0}
-  end
-
-  def transform(source, :integer) when is_boolean(source) do
-    {:ok, (if source, do: 1, else: 0)}
-  end
-
-  def transform(source, :float) when is_boolean(source) do
-    {:ok, (if source, do: 1.0, else: 0.0)}
-  end
-
-  def transform(source, :decimal) when is_boolean(source) do
-    {:ok, (if source, do: Decimal.new(1), else: Decimal.new(0))}
-  end
-
-  def transform(value = %Date{}, :naive_datetime) do
-    NaiveDateTime.new(value, ~T[00:00:00])
-  end
-
-  def transform(value = %Date{}, :datetime) do
-    {:ok, naive_datetime} = transform(value, :naive_datetime)
-    DateTime.from_naive naive_datetime, "Etc/UTC"
-  end
-
-  def transform(_value = %Date{}, :time) do
-    {:ok, ~T[00:00:00]}
-  end
-
-  def transform(value, :currency) when is_binary(value) do
-    {:ok, decimal} = transform(value, :decimal)
+  def transform(string, :currency) when is_binary(string) do
+    {:ok, decimal} = transform(string, :decimal)
     transform(decimal, :currency)
   end
 
@@ -108,39 +126,21 @@ defmodule Transform.Type do
     transform(value, :currency, format: "$#,##0.##")
   end
 
-  def transform(source, :datetime) do
-    Ecto.Type.cast(:utc_datetime, source)
+  # to :string
+
+  def transform(any, :string) do
+    {:ok, to_string(any)}
   end
+
+  # default to Ecto type casting
 
   def transform(source, target) do
     Ecto.Type.cast(target, source)
   end
 
   # With formats and locale
-  @default_opts [locale: "en"]
 
-  def transform(value, transformation, options)
-
-  def transform(value, :string, options = [format: format]) when is_list(format) do
-    IO.inspect 1
-    transform(value, :string, localize_format(options))
-  end
-
-  def transform(value, :string, opts) when is_list(opts)do
-    opts = localize_format(opts)
-    Timex.Format.DateTime.Formatter.lformat value, opts[:format], opts[:locale]
-  end
- 
-  def transform(string, :date, options) when is_binary(string) and is_list(options) do
-    IO.inspect 4
-    {:ok, naive_datetime} = transform string, :naive_datetime, options
-    transform naive_datetime, :date
-  end
- 
-  def transform(string, :naive_datetime, options) when is_binary(string) and is_list(options) do
-    IO.inspect 5
-    Timex.Parse.DateTime.Parser.parse(string, options[:format])
-  end
+  # to :currency
  
   def transform(string, :currency, options) when is_binary(string) do
     IO.inspect 6
@@ -153,36 +153,27 @@ defmodule Transform.Type do
     Cldr.Number.to_string(number, options) |> replace_non_breaking_spaces
   end
 
-  ## On the death march
+  # to :date
 
-  # def transform(value, :string, format, locale) when is_binary(format) do
-  #   IO.inspect 91
-  #   Timex.Format.DateTime.Formatter.lformat value, format, locale
-  # end
-
-  def transform(string, :date, format) when is_binary(string) and is_binary(format) do
-    IO.inspect 92
-    {:ok, naive_datetime} = transform(string, :naive_datetime, format)
-    transform(naive_datetime, :date)
+  def transform(string, :date, options) when is_binary(string) and is_list(options) do
+    IO.inspect 4
+    {:ok, naive_datetime} = transform string, :naive_datetime, options
+    transform naive_datetime, :date
   end
+
+  # to :naive_datetime
  
-  def transform(string, :naive_datetime, format) when is_binary(string) and is_binary(format) do
-    IO.inspect 93
-    Timex.Parse.DateTime.Parser.parse(string, format)
+  def transform(string, :naive_datetime, options) when is_binary(string) and is_list(options) do
+    IO.inspect 5
+    Timex.Parse.DateTime.Parser.parse(string, options[:format])
   end
 
-  def transform(value, :currency, format, locale) when is_binary(value) do
-    IO.inspect 94
-    {:ok, decimal} = transform(value, :decimal)
-    transform(decimal, :currency, format, locale)
-  end
+  # to :string
 
-  def transform(number, :currency, format, locale) do
-    IO.inspect 95
-    Cldr.Number.to_string(number, format: format, locale: locale) |> replace_non_breaking_spaces
+  def transform(value, :string, opts) when is_list(opts)do
+    opts = localize_format(opts)
+    Timex.Format.DateTime.Formatter.lformat value, opts[:format], opts[:locale]
   end
-
-  ## the death match is over
 
   defp localize_format(opts) do
     opts = Keyword.merge(@default_opts, opts)
