@@ -122,30 +122,30 @@ defmodule Transform.Type do
  
   def transform(value, :string, options, locale) when is_list(options) do
     locale_atom = String.to_atom(locale)
-    locale_format = options[locale_atom]
-    transform(value, :string, locale_format, locale)
+    format = options[locale_atom]
+    transform(value, :string, format, locale)
   end
 
-  def transform(value, :string, options, locale) when is_binary(options) do
-    Timex.Format.DateTime.Formatter.lformat(value, options, locale)
+  def transform(value, :string, format, locale) when is_binary(format) do
+    Timex.Format.DateTime.Formatter.lformat(value, format, locale)
   end
  
-  def transform(string, :date, options, _locale) when is_binary(string) and is_binary(options) do
-    {:ok, naive_datetime} = transform(string, :naive_datetime, options)
+  def transform(string, :date, format, _locale) when is_binary(string) and is_binary(format) do
+    {:ok, naive_datetime} = transform(string, :naive_datetime, format)
     transform(naive_datetime, :date)
   end
  
-  def transform(string, :naive_datetime, options, _locale) when is_binary(string) and is_binary(options) do
-    Timex.Parse.DateTime.Parser.parse(string, options)
+  def transform(string, :naive_datetime, format, _locale) when is_binary(string) and is_binary(format) do
+    Timex.Parse.DateTime.Parser.parse(string, format)
   end
 
-  def transform(value, :currency, options, locale) when is_binary(value) do
+  def transform(value, :currency, format, locale) when is_binary(value) do
     {:ok, decimal} = transform(value, :decimal)
-    transform(decimal, :currency, options, locale)
+    transform(decimal, :currency, format, locale)
   end
 
-  def transform(value, :currency, options, locale) do
-    Cldr.Number.to_string(value, format: options, locale: locale) |> replace_non_breaking_spaces
+  def transform(value, :currency, format, locale) do
+    Cldr.Number.to_string(value, format: format, locale: locale) |> replace_non_breaking_spaces
   end
 
   defp replace_non_breaking_spaces({:ok, string}) do

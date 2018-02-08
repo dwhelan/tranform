@@ -35,8 +35,8 @@ defmodule Transform.Transformer do
     Enum.reduce transforms, value, &transform(&2, &1, locale)
   end  
 
-  def transform(value, {transform, options}, locale) do
-    Type.transform(value, transform, options, locale)
+  def transform(value, {transform, format}, locale) do
+    Type.transform(value, transform, format, locale)
   end
 
   def transform(value, transform, locale) when is_atom(transform) do
@@ -50,8 +50,8 @@ defmodule Transform.Transformer do
     end)
   end
 
-  def transform(value, transform, options, locale) do
-    Type.transform(value, transform, options, locale)
+  def transform(value, transform, format, locale) do
+    Type.transform(value, transform, format, locale)
   end
 
   defp locale(map, mod) do
