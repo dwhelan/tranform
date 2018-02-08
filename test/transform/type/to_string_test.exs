@@ -80,11 +80,11 @@ defmodule Transformer.Type.ToStringTest do
     end
 
     test "from NaiveDateTime with format" do
-      assert transform(~N[1970-01-01 00:00:00], :string, "{Mfull} 1, {YYYY}") === {:ok, "January 1, 1970"}
+      assert transform(~N[1970-01-01 00:00:00], :string, format: "{Mfull} 1, {YYYY}") === {:ok, "January 1, 1970"}
     end
     
     test "from NaiveDateTime with format and locale" do
-      assert transform(~N[1970-01-01 00:00:00], :string, "{Mfull} 1, {YYYY}", "fr") === {:ok, "janvier 1, 1970"}
+      assert transform(~N[1970-01-01 00:00:00], :string, format: "{Mfull} 1, {YYYY}", locale: "fr") === {:ok, "janvier 1, 1970"}
     end
 
     test "from NaiveDateTime with multiple localized formats" do

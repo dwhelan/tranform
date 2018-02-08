@@ -105,7 +105,7 @@ defmodule Transform.Type do
   end
 
   def transform(value, :currency) do
-    transform(value, :currency, "$#,##0.##")
+    transform(value, :currency, format: "$#,##0.##")
   end
 
   def transform(source, :datetime) do
@@ -119,36 +119,36 @@ defmodule Transform.Type do
   # With formats and locale
   @default_opts [locale: "en"]
 
-  def transform(value, transformation, options, locale \\ "en")
+  def transform(value, transformation, options)
 
-  def transform(value, :string, options = [format: format], _locale) when is_list(format) do
+  def transform(value, :string, options = [format: format]) when is_list(format) do
     IO.inspect 1
     transform(value, :string, localize_format(options))
   end
 
-  def transform(value, :string, opts, _locale) when is_list(opts)do
+  def transform(value, :string, opts) when is_list(opts)do
     opts = localize_format(opts)
     Timex.Format.DateTime.Formatter.lformat value, opts[:format], opts[:locale]
   end
  
-  def transform(string, :date, options, _locale) when is_binary(string) and is_list(options) do
+  def transform(string, :date, options) when is_binary(string) and is_list(options) do
     IO.inspect 4
     {:ok, naive_datetime} = transform string, :naive_datetime, options
     transform naive_datetime, :date
   end
  
-  def transform(string, :naive_datetime, options, _locale) when is_binary(string) and is_list(options) do
+  def transform(string, :naive_datetime, options) when is_binary(string) and is_list(options) do
     IO.inspect 5
     Timex.Parse.DateTime.Parser.parse(string, options[:format])
   end
  
-  def transform(string, :currency, options, _locale) when is_binary(string) do
+  def transform(string, :currency, options) when is_binary(string) do
     IO.inspect 6
     {:ok, decimal} = transform(string, :decimal)
     transform(decimal, :currency, options)
   end
 
-  def transform(number, :currency, options, _locale) when is_list(options) do
+  def transform(number, :currency, options) when is_list(options) do
     IO.inspect 7
     Cldr.Number.to_string(number, options) |> replace_non_breaking_spaces
   end
@@ -160,13 +160,13 @@ defmodule Transform.Type do
     Timex.Format.DateTime.Formatter.lformat value, format, locale
   end
 
-  def transform(string, :date, format, _locale) when is_binary(string) and is_binary(format) do
+  def transform(string, :date, format) when is_binary(string) and is_binary(format) do
     IO.inspect 92
     {:ok, naive_datetime} = transform(string, :naive_datetime, format)
     transform(naive_datetime, :date)
   end
  
-  def transform(string, :naive_datetime, format, _locale) when is_binary(string) and is_binary(format) do
+  def transform(string, :naive_datetime, format) when is_binary(string) and is_binary(format) do
     IO.inspect 93
     Timex.Parse.DateTime.Parser.parse(string, format)
   end
