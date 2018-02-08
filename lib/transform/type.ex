@@ -116,20 +116,48 @@ defmodule Transform.Type do
     Ecto.Type.cast(target, source)
   end
 
-  # With options
+  # With formats and locale
 
   def transform(value, transformation, options, locale \\ "en")
- 
-  def transform(value, :string, options, locale) when is_list(options) do
-    locale_atom = String.to_atom(locale)
-    format = options[locale_atom]
+
+  def transform(value, :string, options = [format: [_|_]], _locale) do
+    IO.inspect "yo"
+    transform(value, :string, localize_format(options))
+  end
+
+  def transform(value, :string, locale_formats, locale) when is_list(locale_formats) do
+    format = locale_formats[String.to_atom(locale)]
     transform(value, :string, format, locale)
   end
 
-  def transform(value, :string, format, locale) when is_binary(format) do
-    Timex.Format.DateTime.Formatter.lformat(value, format, locale)
+  def transform(value, :string, options, _locale) when is_list(options)do
+    Timex.Format.DateTime.Formatter.lformat value, options[:format], options[:locale]
   end
  
+  def transform(string, :date, options, _locale) when is_binary(string) and is_list(options) do
+    {:ok, naive_datetime} = transform string, :naive_datetime, options
+    transform naive_datetime, :date
+  end
+ 
+  def transform(string, :naive_datetime, options, _locale) when is_binary(string) and is_list(options) do
+    Timex.Parse.DateTime.Parser.parse(string, options[:format])
+  end
+ 
+  def transform(value, :currency, options, _locale) when is_binary(value) do
+    {:ok, decimal} = transform(value, :decimal)
+    transform(decimal, :currency, options)
+  end
+
+  def transform(number, :currency, options, _locale) when is_list(options) do
+    Cldr.Number.to_string(number, options) |> replace_non_breaking_spaces
+  end
+
+  ## On the death march
+
+  def transform(value, :string, format, locale) when is_binary(format) do
+    Timex.Format.DateTime.Formatter.lformat value, format, locale
+  end
+
   def transform(string, :date, format, _locale) when is_binary(string) and is_binary(format) do
     {:ok, naive_datetime} = transform(string, :naive_datetime, format)
     transform(naive_datetime, :date)
@@ -144,8 +172,16 @@ defmodule Transform.Type do
     transform(decimal, :currency, format, locale)
   end
 
-  def transform(value, :currency, format, locale) do
-    Cldr.Number.to_string(value, format: format, locale: locale) |> replace_non_breaking_spaces
+  def transform(number, :currency, format, locale) do
+    Cldr.Number.to_string(number, format: format, locale: locale) |> replace_non_breaking_spaces
+  end
+
+  ## the death match is over
+
+  defp localize_format(options) do
+    locale = options[:locale]
+    format = options[:format]
+    Keyword.put options, :format, format[String.to_atom(locale)]
   end
 
   defp replace_non_breaking_spaces({:ok, string}) do
