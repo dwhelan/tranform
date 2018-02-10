@@ -27,7 +27,7 @@ defmodule Transform.Mixfile do
       {:ecto,            "~> 2.1"},
       {:mix_test_watch,  "~> 0.5", only: :dev},
       {:timex,           "~> 3.0"},
-      {:excoveralls, "~> 0.8", only: :test},
+      {:excoveralls,     "~> 0.8", only: :test},
     ]
   end
 end
