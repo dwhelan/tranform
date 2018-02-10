@@ -36,9 +36,9 @@ defmodule Transform.Transform do
     end
   end
 
-  defmacro trim(trim) do
-    quote bind_quoted: [trim: trim] do
-      Module.put_attribute __MODULE__, :trim, trim
+  defmacro trim(trim \\ :all) do
+    quote do
+      Module.put_attribute __MODULE__, :trim, unquote(trim)
     end
   end
 

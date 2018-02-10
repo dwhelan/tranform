@@ -12,6 +12,7 @@ defmodule Transform.Transformer.DateTest do
     assert result == ~D[2001-01-01]
   end
 
+  @tag :focus
   test ":date => string" do
     {:ok, result} = transform ~D[2001-01-01], :string
     assert result ==  "2001-01-01"

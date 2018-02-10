@@ -10,7 +10,6 @@ defmodule Transform.TrimTest do
     use Transform.Transform
 
     transform do
-      field :text
     end
   end
   
@@ -22,13 +21,12 @@ defmodule Transform.TrimTest do
     use Transform.Transform
 
     transform do
-      trim :trailing
-      field :text
+      trim :all
     end
   end
 
   @tag :wip
-  test "should trim trailing" do
+  test "with no args should trim leading and trailing" do
     assert %Source{text: " abc"} = transform %Source{text: " abc "}, Trailing
   end
 end

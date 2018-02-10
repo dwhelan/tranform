@@ -6,46 +6,41 @@ defmodule Transform.Transformer do
   end
 
   def transform(value, transform) when transform in [:string, :date] do
-    IO.inspect :transformer1
     Type.transform(value, transform)
   end
 
   def transform(value, mod) when is_atom(mod) do
-    IO.inspect :transformer2
     transform value, mod.__transform__(:transforms), locale: locale(value, mod)
   end
 
   def transform(value, transform, opts \\ []) 
 
   def transform(nil, _, _) do
-    IO.inspect :transformer2a
     {:ok, nil}
   end
 
   # applies a single transform to value
 
   def transform(value, transform, opts) when is_atom(transform) and is_list(opts) do
-    IO.inspect :transformer8
     Type.transform(value, transform, opts)
   end
 
   # applies a list of transforms to value
 
   def transform(value, transforms, opts) when is_list(transforms) and is_list(opts) do
-    IO.inspect :transformer3
     Enum.reduce transforms, value, &transform(&2, &1, opts)
   end  
 
-  # handles "field :x, string: [en: ..., fr: ...]" where the locale is used to determine format
+  # handles "transform map, string: [en: ..., fr: ...]" where the locale is used to determine format
 
-  def transform(map, {:string, transforms}, opts) when is_map(map) and is_list(transforms) and is_list(opts) do
-    IO.inspect :transformer4
-    opts = Keyword.put(opts, :format, transforms[String.to_atom(opts[:locale])])
+  def transform(map, {:string, formats}, opts) when is_map(map) and is_list(formats) and is_list(opts) do
+    opts = Keyword.put(opts, :format, formats[String.to_atom(opts[:locale])])
     transform(map, :string, opts)
   end  
 
+  # handles "field :x, transform1: opts1, tranform2: opts2"
+
   def transform(map, {key, transforms}, opts) when is_map(map) and is_list(transforms) and is_list(opts) do
-    IO.inspect {:transformer5, {key, transforms}, opts}
     Enum.reduce(transforms, map, fn transform, input ->
       {:ok, value} = transform(Map.get(input, key), transform, opts)
       Map.put(input, key, value)
@@ -53,7 +48,6 @@ defmodule Transform.Transformer do
   end  
 
   def transform(value, {transform, format}, opts) when is_list(opts) do
-    IO.inspect {:transformer7, value, format, opts}
     opts = Keyword.put(opts, :format, format)
     Type.transform(value, transform, opts)
   end

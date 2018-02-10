@@ -7,7 +7,6 @@ defmodule Transformer.Type.ToCurrencyTest do
       assert transform(nil, :currency) === {:ok, nil}
     end
 
-    @tag :focus
     test "from String" do
       assert transform("1234.56", :currency) === {:ok, "$1,234.56"}
     end

@@ -143,20 +143,17 @@ defmodule Transform.Type do
   # to :currency
  
   def transform(string, :currency, options) when is_binary(string) do
-    IO.inspect 6
     {:ok, decimal} = transform(string, :decimal)
     transform(decimal, :currency, options)
   end
 
   def transform(number, :currency, options) when is_list(options) do
-    IO.inspect :type7
     Cldr.Number.to_string(number, options) |> replace_non_breaking_spaces
   end
 
   # to :date
 
   def transform(string, :date, options) when is_binary(string) and is_list(options) do
-    IO.inspect 4
     {:ok, naive_datetime} = transform string, :naive_datetime, options
     transform naive_datetime, :date
   end
@@ -164,7 +161,6 @@ defmodule Transform.Type do
   # to :naive_datetime
  
   def transform(string, :naive_datetime, options) when is_binary(string) and is_list(options) do
-    IO.inspect 5
     Timex.Parse.DateTime.Parser.parse(string, options[:format])
   end
 
