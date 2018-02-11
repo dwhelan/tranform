@@ -17,16 +17,15 @@ defmodule Transform.TrimTest do
     assert %Source{text: " abc "} = transform %Source{text: " abc "}, Default
   end
 
-  defmodule Trailing do
+  defmodule All do
     use Transform.Transform
 
     transform do
-      trim :all
+      field :text, trim: :all
     end
   end
 
-  @tag :wip
   test "with no args should trim leading and trailing" do
-    assert %Source{text: " abc"} = transform %Source{text: " abc "}, Trailing
+    assert %Source{text: "abc"} = transform %Source{text: " abc "}, All
   end
 end

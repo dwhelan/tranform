@@ -7,9 +7,6 @@ defmodule Transform.Transform do
 
       Module.register_attribute __MODULE__, :transforms, accumulate: true
       Module.put_attribute __MODULE__, :locale, [in: Translator.current_locale, out: Translator.current_locale]
-
-      # defaults
-      trim :none
    end
   end
 
@@ -22,7 +19,7 @@ defmodule Transform.Transform do
 
   defmacro transform do
     quote do
-      Module.eval_quoted __ENV__, Transform.Transform.__transform__(@transforms, @locale, @trim)
+      Module.eval_quoted __ENV__, Transform.Transform.__transform__(@transforms, @locale)
     end
   end
 
@@ -33,12 +30,6 @@ defmodule Transform.Transform do
         true              -> locale
       end
       Module.put_attribute __MODULE__, :locale, locale
-    end
-  end
-
-  defmacro trim(trim \\ :all) do
-    quote do
-      Module.put_attribute __MODULE__, :trim, unquote(trim)
     end
   end
 
@@ -54,11 +45,10 @@ defmodule Transform.Transform do
     end
   end
 
-  def __transform__(transforms, locale, trim) do
+  def __transform__(transforms, locale) do
     quote do
       def __transform__(:transforms), do: unquote(transforms)
       def __transform__(:locale),     do: unquote(locale)
-      def __transform__(:trim),       do: unquote(trim)
     end
   end
 end

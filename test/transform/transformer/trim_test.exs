@@ -2,13 +2,19 @@ defmodule Transform.Transformer.TrimTest do
   use ExUnit.Case
   import Transform.Transformer
 
-  @tag :wip
-  test "by default no trimming should occur" do
-    assert {:ok, " abc "} = transform " abc ", :string
+  test ":all should trim leading and trailing" do
+    assert {:ok, "abc"} = transform " abc ", trim: :all
   end
 
-  @tag :wip
-  test "should trim trailing" do
-    assert {:ok, " abc"} = transform " abc ", :string, trim: :trailing
+  test ":leading should trim leading" do
+    assert {:ok, "abc "} = transform " abc ", trim: :leading
+  end
+
+  test ":trailing should trim trailing" do
+    assert {:ok, " abc"} = transform " abc ", trim: :trailing
+  end
+
+  test ":none should not trim" do
+    assert {:ok, " abc "} = transform " abc ", trim: :none
   end
 end

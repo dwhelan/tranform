@@ -38,8 +38,6 @@ defmodule Transform.Transformer do
     transform(map, :string, opts)
   end  
 
-  # handles "field :x, transform1: opts1, tranform2: opts2"
-
   def transform(map, {key, transforms}, opts) when is_map(map) and is_list(transforms) and is_list(opts) do
     Enum.reduce(transforms, map, fn transform, input ->
       {:ok, value} = transform(Map.get(input, key), transform, opts)

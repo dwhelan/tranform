@@ -138,7 +138,7 @@ defmodule Transform.Type do
     Ecto.Type.cast(target, source)
   end
 
-  # With formats and locale
+  # With options
 
   # to :currency
  
@@ -164,7 +164,17 @@ defmodule Transform.Type do
     Timex.Parse.DateTime.Parser.parse(string, options[:format])
   end
 
-  # to :string
+  # trim
+
+  def transform(string, :trim, opts) when is_binary(string) and is_list(opts) do
+    value = case opts[:format] do
+      :all      -> String.trim(string)
+      :leading  -> String.trim_leading(string)
+      :trailing -> String.trim_trailing(string)
+      :none     -> string
+    end
+    {:ok, value}
+  end
 
   def transform(value, :string, opts) when is_list(opts)do
     opts = localize_format(opts)
