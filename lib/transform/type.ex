@@ -164,7 +164,7 @@ defmodule Transform.Type do
     Timex.Parse.DateTime.Parser.parse(string, options[:format])
   end
 
-  # trim
+  # :trim
 
   def transform(string, :trim, opts) when is_binary(string) and is_list(opts) do
     value = case opts[:format] do
@@ -174,6 +174,24 @@ defmodule Transform.Type do
       :none     -> string
     end
     {:ok, value}
+  end
+
+  # :remove
+
+  def transform(string, :remove, opts) when is_binary(string) and is_list(opts) do
+    opts = opts[:format]
+    if is_list(opts) do
+      {:ok, String.replace(string, opts[:pattern], "", opts)}
+    else
+      {:ok, String.replace(string, opts, "")}
+    end
+  end
+
+  # :replace
+
+  def transform(string, :replace, opts) when is_binary(string) and is_list(opts) do
+    opts = opts[:format]
+    {:ok, String.replace(string, opts[:pattern], opts[:with], opts)}
   end
 
   def transform(value, :string, opts) when is_list(opts)do
