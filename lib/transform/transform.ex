@@ -19,7 +19,7 @@ defmodule Transform.Transform do
 
   defmacro transform do
     quote do
-      Module.eval_quoted __ENV__, Transform.Transform.__transform__(@transforms, @locale)
+      Module.eval_quoted __ENV__, Transform.Transform.__transform__(Enum.reverse(@transforms), @locale)
     end
   end
 
