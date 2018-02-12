@@ -41,7 +41,7 @@ defmodule Transform.Transform do
 
   defmacro field(name, transforms \\ []) do
     quote bind_quoted: [name: name, transforms: transforms] do
-      Module.put_attribute __MODULE__, :transforms, {name, transforms}
+      Module.put_attribute __MODULE__, :transforms, {name, Macro.escape(transforms, unquote: true)}
     end
   end
 
