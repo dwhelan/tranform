@@ -115,15 +115,15 @@ defmodule Transform.Type do
     NaiveDateTime.new(date, ~T[00:00:00])
   end
 
-  # to :currency
+  # to :number
 
-  def transform(string, :currency) when is_binary(string) do
+  def transform(string, :number) when is_binary(string) do
     {:ok, decimal} = transform(string, :decimal)
-    transform(decimal, :currency)
+    transform(decimal, :number)
   end
 
-  def transform(value, :currency) do
-    transform(value, :currency, format: "$#,##0.##")
+  def transform(value, :number) do
+    transform(value, :number, format: "$#,##0.##")
   end
 
   # to :string
@@ -140,14 +140,14 @@ defmodule Transform.Type do
 
   # With options
 
-  # to :currency
+  # to :number
  
-  def transform(string, :currency, options) when is_binary(string) do
+  def transform(string, :number, options) when is_binary(string) do
     {:ok, decimal} = transform(string, :decimal)
-    transform(decimal, :currency, options)
+    transform(decimal, :number, options)
   end
 
-  def transform(number, :currency, options) when is_list(options) do
+  def transform(number, :number, options) when is_list(options) do
     Cldr.Number.to_string(number, options) |> replace_non_breaking_spaces
   end
 
